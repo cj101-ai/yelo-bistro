@@ -1,0 +1,6 @@
+{
+  "name": "Yelo Bistro",
+  "description": "A premium, responsive cafe and food delivery website featuring a warm yellow brand identity, dynamic product menus, active shopping cart, and mock delivery tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
