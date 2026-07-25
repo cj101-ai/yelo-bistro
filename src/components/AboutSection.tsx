@@ -5,10 +5,10 @@ import { TEAM_MEMBERS } from '../data';
 
 export default function AboutSection() {
   const galleryImages = [
-    { url: "images/PT Image Jul 3, 2026, 04_45_05 PM.png", title: "Share Moments With Friends" },
-    { url: "images/PT Image Jul 3, 2026, 04_20_06 PM.png", title: "Explore Our Varieties" },
-    { url: "images/PT Image Jul 4, 2026, 11_52_05 AM.png", title: "Enjoy Delicious Meals" },
-    { url: "images/PT Image Jul 3, 2026, 04_54_34 PM.png", title: "Gourmet Loaded Fries in Bamboo Pak" }
+    { url: "/images/PT Image Jul 3, 2026, 04_45_05 PM.png", title: "Share Moments With Friends" },
+    { url: "/images/PT Image Jul 3, 2026, 04_20_06 PM.png", title: "Explore Our Varieties" },
+    { url: "/images/PT Image Jul 4, 2026, 11_52_05 AM.png", title: "Enjoy Delicious Meals" },
+    { url: "/images/PT Image Jul 3, 2026, 04_54_34 PM.png", title: "Gourmet Loaded Fries in Bamboo Pak" }
   ];
 
   return (
@@ -65,7 +65,7 @@ export default function AboutSection() {
             <div className="space-y-4">
               <div className="rounded-3xl overflow-hidden aspect-[4/5] shadow-lg">
                 <img
-                  src="images/PT Image Jul 3, 2026, 04_33_10 PM.png"
+                  src="/images/PT Image Jul 3, 2026, 04_33_10 PM.png"
                   alt=""
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -73,7 +73,7 @@ export default function AboutSection() {
               </div>
               <div className="rounded-3xl overflow-hidden aspect-[4/5] shadow-lg">
                 <img
-                  src="images/PT Image Jul 3, 2026, 04_54_34 PM.png"
+                  src="/images/PT Image Jul 3, 2026, 04_54_34 PM.png"
                   alt=""
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
