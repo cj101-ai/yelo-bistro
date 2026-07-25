@@ -36,7 +36,7 @@ export default function Logo({ className = "w-12 h-12", animateBounce = true }: 
       <img
       src="/favicon.png"
       alt="Yelo Bistro & Cafe Logo"
-       className="w-full h-full object-contain"
+      className="w-12 h-12 object-contain rounded-full" 
 />
     </motion.div>
   );
