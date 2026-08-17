@@ -8,16 +8,17 @@ export default function AboutSection() {
     { url: "/images/PT Image Jul 3, 2026, 04_45_05 PM.png", title: "Share Moments With Friends" },
     { url: "/images/PT Image Jul 3, 2026, 04_20_06 PM.png", title: "Explore Our Varieties" },
     { url: "/images/PT Image Jul 4, 2026, 11_52_05 AM.png", title: "Enjoy Delicious Meals" },
-    { url: "/images/PT Image Jul 3, 2026, 04_54_34 PM.png", title: "Gourmet Loaded Fries in Bamboo Pak" }
+    { url: "/images/PT Image Jul 3, 2026, 04_54_34 PM.png", title: "explore fine dining environment" },
+
   ];
 
   return (
-    <section className="py-16 bg-stone-50 dark:bg-neutral-950 transition-colors duration-300" id="bistro-about-section">
+    <section className="py-16 bg-yellow-300 dark:bg-neutral-950 transition-colors duration-300" id="bistro-about-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
         
         {/* Story Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
+        
           {/* Left Column Text */}
           <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-100 dark:bg-yellow-950/40 text-yellow-800 dark:text-yellow-400 font-bold text-xs font-mono uppercase tracking-widest rounded-full">
@@ -86,7 +87,7 @@ export default function AboutSection() {
 
         </div>
 
-        {/* Mission and values Row */}
+        {/* Mission and values Row 
         <div className="bg-white dark:bg-neutral-900/40 border border-stone-200/55 dark:border-neutral-800/80 rounded-3xl p-8 sm:p-12 items-center" id="bistro-values">
           <div className="text-center max-w-xl mx-auto mb-10 space-y-1.5">
             <span className="text-red-500 font-extrabold text-xs uppercase tracking-widest font-mono"></span>
@@ -128,7 +129,7 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Chef profiles */}
+        {/* Chef profiles 
         <div className="space-y-12">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-red-500 font-extrabold text-xs uppercase tracking-widest font-mono">Meet The Creators</span>
@@ -141,7 +142,7 @@ export default function AboutSection() {
                 key={chef.name}
                 className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-3xl bg-white dark:bg-neutral-900/40 border border-stone-200/50 dark:border-neutral-800 relative group overflow-hidden"
               >
-                {/* Background decorative accent */}
+                {/* Background decorative accent 
                 <div className="absolute top-0 right-0 w-20 h-20 bg-yellow-400/5 rounded-full blur-xl group-hover:bg-yellow-400/10 transition-all"></div>
 
                 <div className="w-24 sm:w-32 h-24 sm:h-32 rounded-2xl overflow-hidden shadow-md shrink-0 bg-stone-100">
@@ -165,7 +166,7 @@ export default function AboutSection() {
               </div>
             ))}
           </div>
-        </div>
+        </div>*/}
   
         
                       {/* Customer Testimonials carousel */}

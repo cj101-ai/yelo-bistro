@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Search, Star, Clock, SlidersHorizontal, Plus, Minus, SearchX, Check } from 'lucide-react';
 import { FoodItem, CartItem } from '../types';
 import { FOOD_ITEMS } from '../data';
+import MenuCard from "./MenuCard";
 
 interface MenuSectionProps {
   onAddToCart: (item: FoodItem) => void;
@@ -12,7 +13,7 @@ interface MenuSectionProps {
   compact?: boolean; // Useful to show only 4 items in a "Featured Featured Section" on Home!
 }
 
-type CategoryType = 'All' | 'Noodles' | 'Burgers' | 'Shawarma' | 'Rice Meals' | 'Pasta' | 'Wings'| 'Cocktail Wings' |'Combo Deals' |'Proteins' |'Specials' |'BreakFast'|'Juice & Drinks' ;
+type CategoryType = 'All' | 'Shawarma' | 'Rice Meals' | 'Wings' | 'Cocktail Wings' | 'Pasta' | 'Combo Deals' | 'Specials';
 type SortOption = 'relevance' | 'price-asc' | 'price-desc' | 'rating';
 
 export default function MenuSection({
@@ -23,18 +24,19 @@ export default function MenuSection({
 }: MenuSectionProps) {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedCategory, setSelectedCategory] = React.useState<CategoryType>('All');
+  
   React.useEffect(() => {
-  const savedCategory = localStorage.getItem("selectedCategory");
+    const savedCategory = localStorage.getItem("selectedCategory");
+    if (savedCategory) {
+      setSelectedCategory(savedCategory as CategoryType);
+      localStorage.removeItem("selectedCategory");
+    }
+  }, []);
 
-  if (savedCategory) {
-    setSelectedCategory(savedCategory as CategoryType);
-
-    localStorage.removeItem("selectedCategory");
-  }
-}, []);
   const [currentSort, setCurrentSort] = React.useState<SortOption>('relevance');
 
-  const categories: CategoryType[] = ['All', 'Noodles', 'Burgers', 'Shawarma', 'Rice Meals', 'Wings','Cocktail Wings', 'Pasta', 'Combo Deals', 'Proteins', 'Specials','BreakFast', 'Juice & Drinks'];
+  // Streamlined category array with Burgers removed
+  const categories: CategoryType[] = [ 'All', 'Wings', 'Cocktail Wings', 'Pasta', 'Combo Deals', ];
 
   // Filter & Sort Logic
   const filteredAndSortedItems = React.useMemo(() => {
@@ -42,7 +44,6 @@ export default function MenuSection({
 
     // Category filter
     if (compact) {
-      // For compact, show featured items
       items = items.filter(item => item.isFeatured);
     } else {
       if (selectedCategory !== 'All') {
@@ -73,10 +74,26 @@ export default function MenuSection({
     return items;
   }, [selectedCategory, searchTerm, currentSort, compact]);
 
-  // Helper to retrieve accurate quantity of a foodItem currently in checkout cart
+  // Group items by category for permanent header rendering
+  const groupedItems = React.useMemo(() => {
+    const groups: Record<string, typeof filteredAndSortedItems> = {};
+    filteredAndSortedItems.forEach((item) => {
+      if (!groups[item.category]) {
+        groups[item.category] = [];
+      }
+      groups[item.category].push(item);
+    });
+    return groups;
+  }, [filteredAndSortedItems]);
+
   const getItemQuantity = (itemId: string) => {
-    const found = cart.find(c => c.item.id === itemId);
-    return found ? found.quantity : 0;
+  return cart
+    .filter((cartItem) => cartItem.item.id === itemId)
+    .reduce(
+      (total, cartItem) => total + cartItem.quantity,
+      0
+    );
+    
   };
 
   return (
@@ -88,12 +105,9 @@ export default function MenuSection({
           <p className="text-red-500 font-extrabold text-sm uppercase tracking-widest font-mono">
             {compact ? "" : "Explore Culinary Creations"}
           </p>
-          <h2 className="text-3xl sm:text-4xl font-black text-pink-900 dark:text-white tracking-tight">
-            {compact ? "Our Featured Delicacies" : "The Yelo Menu"}
+          <h2 className="text-6xl sm:text-8xl font-black text-yellow-300 dark:text-white tracking-tight">
+            {compact ? "MAIN MENU" : "MAIN MENU"}
           </h2>
-          <p className="text-stone-500 dark:text-neutral-400 text-sm sm:text-base leading-relaxed">
-            Freshly prepared, carefully cooked, and temperature-sealed. Simply choose, order, and track!
-          </p>
         </div>
 
         {/* Dynamic Filters Form - Omitted if compact */}
@@ -103,7 +117,7 @@ export default function MenuSection({
             {/* Search Input and Sort Select */}
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
               
-              {/* Search Bar */}
+              {/* Search Bar 
               <div className="relative w-full md:max-w-md">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
                 <input
@@ -121,9 +135,9 @@ export default function MenuSection({
                     Clear
                   </button>
                 )}
-              </div>
+              </div> */}
 
-              {/* Sort selector */}
+              {/* Sort selector 
               <div className="flex items-center gap-3 w-full md:w-auto justify-end">
                 <span className="text-xs text-stone-500 dark:text-stone-400 font-semibold uppercase tracking-wider font-mono flex items-center gap-1.5">
                   <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -139,168 +153,67 @@ export default function MenuSection({
                   <option value="price-desc">Price: High to Low</option>
                   <option value="rating">Rating: Highest First</option>
                 </select>
-              </div>
+              </div>*/}
 
             </div>
 
-            {/* Category selection pills scroll containers */}
-            <div className="overflow-x-auto no-scrollbar py-2 -mx-4 px-4 flex items-center gap-2.5">
-              {categories.map((cat) => {
-                const isActive = selectedCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`whitespace-nowrap px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-bold tracking-tight transition-all duration-300 transform hover:scale-102 cursor-pointer ${
-                      isActive
-                        ? 'bg-neutral-900 dark:bg-yellow-400 text-white dark:text-neutral-900 shadow-md'
-                        : 'bg-stone-50 dark:bg-neutral-900 text-stone-600 dark:text-neutral-300 border border-stone-200/60 dark:border-neutral-800 hover:bg-stone-100/80 dark:hover:bg-neutral-800'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
+            {/* Static Red Block Container with Custom Shrunk Buttons */}
+            <div className="w-full bg-yellow-300 dark:bg-red-700 rounded-xl sm:rounded-2xl md:rounded-3xl p-0.9 sm:p-1 md:p-1 shadow-lg mx-auto">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+                {categories.map((cat) => {
+                  const isActive = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`flex-1 min-w-[80px] sm:min-w-[100px] max-w-[120px] sm:max-w-[140px] md:max-w-[160px] text-center whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold uppercase tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer ${
+                        isActive
+                          ? 'bg-white text-red-600 shadow-md border border-white'
+                          : 'bg-transparent text-white border border-transparent/1 hover:bg-red/10'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
           </div>
         )}
 
-        {/* Menu Cards Grid */}
+        {/* Unified Cards Grid Container */}
         {filteredAndSortedItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="food-menu-grid">
-            <AnimatePresence mode="popLayout">
-              {filteredAndSortedItems.map((item, idx) => {
-                const qty = getItemQuantity(item.id);
-                return (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, scale: 0.95, y: 15 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -15 }}
-                    transition={{ duration: 0.4, delay: Math.min(idx * 0.05, 0.4) }}
-                    className="group bg-stone-50 dark:bg-neutral-900/60 rounded-3xl border border-stone-200/50 dark:border-neutral-800 p-4 flex flex-col justify-between hover:shadow-xl hover:border-amber-300/40 dark:hover:border-yellow-400/20 transition-all duration-300 h-full relative"
-                  >
-                    {item.isFeatured && (
-                      <span className="absolute top-6 left-6 z-10 bg-red-500 text-white text-[9px] font-bold py-1 px-3 rounded-full uppercase tracking-widest shadow-sm">
-                        Popular
-                      </span>
-                    )}
+          Object.entries(groupedItems).map(([category, items]) => (
+            <div key={category} className="mb-20">
+              
+              {/* Category Header */}
+              <div className="flex items-center w-full my-16">
+                <div className="flex-1 h-[4px] bg-yellow-500" />
+                <h2 className="mx-8 text-3xl md:text-4xl font-black uppercase tracking-[0.08em] text-yellow-500 whitespace-nowrap flex items-center gap-2">
+                  {category}
+                </h2>
+                <div className="flex-1 h-[4px] bg-yellow-500" />
+              </div>
 
-                    {/* Food Photo Container */}
-                    <div className="space-y-4">
-                      <div className="aspect-[4/3] rounded-2.5xl overflow-hidden relative bg-stone-200 shadow-inner">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-106"
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        
-                        {/* Preparation Time & Calories */}
-                        <div className="absolute bottom-3 right-3 flex gap-1.5">
-                          <span className="bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm text-stone-800 dark:text-white px-2.5 py-1 rounded-lg text-[10px] font-bold font-mono shadow-sm flex items-center gap-1">
-                            <Clock className="w-3 h-3 text-red-500" />
-                            {item.prepTime}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Header Info */}
-                      <div className="space-y-1.5 px-1.5">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-[10px] text-red-500 dark:text-yellow-400 font-bold uppercase tracking-widest font-mono">
-                            {item.category}
-                          </span>
-                          <div className="flex items-center gap-0.5 font-mono text-xs text-amber-500 font-bold">
-                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                            <span>{item.rating}</span>
-                          </div>
-                        </div>
-
-                        <h3 className="font-extrabold text-base sm:text-lg text-stone-900 dark:text-white leading-snug tracking-tight group-hover:text-red-500 transition-colors">
-                          {item.name}
-                        </h3>
-
-                        <p className="text-stone-500 dark:text-neutral-400 text-xs line-clamp-4 leading-relaxed">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Primary actions & price tag line */}
-                    <div className="pt-4 mt-4 border-t border-stone-200/50 dark:border-neutral-800 flex items-center justify-between px-1.5">
-                      <div>
-                        <span className="text-[10px] text-stone-400 dark:text-neutral-500 uppercase tracking-widest font-semibold block">Price</span>
-                        <span className="text-xl font-mono font-black text-stone-900 dark:text-white">
-                          ₦{item.price.toFixed(2)}
-                        </span>
-                      </div>
-
-                      {qty > 0 ? (
-                        /* Smart animated quantity slider if item is in the cart */
-                        <div className="flex items-center gap-2.5 bg-yellow-400 dark:bg-yellow-500 text-neutral-950 px-2 py-1.5 rounded-2xl shadow-sm border border-yellow-500/15">
-                          <button
-                            id={`card-dec-${item.id}`}
-                            onClick={() => onRemoveFromCart(item)}
-                            className="p-1 hover:bg-yellow-300 rounded-lg transition-colors cursor-pointer"
-                            title="Decrease quantity"
-                          >
-                            <Minus className="w-3.5 h-3.5" />
-                          </button>
-                          <span className="font-bold text-xs font-mono min-w-[12px] text-center">{qty}</span>
-                          <button
-                            id={`card-inc-${item.id}`}
-                            onClick={() => onAddToCart(item)}
-                            className="p-1 hover:bg-yellow-300 rounded-lg transition-colors cursor-pointer"
-                            title="Increase quantity"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ) : (
-                        /* Standard Add to Cart button */
-                        <button
-                          id={`add-to-cart-btn-${item.id}`}
-                          onClick={() => {
-  onAddToCart(item);
-
-  toast.success((t) => (
-    <div className="bg-white rounded-xl shadow-2xl border p-4 flex items-center gap-4 max-w-sm">
-      <div className="flex-1">
-        <h4 className="font-bold text-green-600">
-          ✅ Added to Cart
-        </h4>
-
-        <p className="text-sm text-gray-600">
-          {item.name} has been added to your cart.
-        </p>
-      </div>
-
-      <button
-        onClick={() => toast.dismiss(t.id)}
-        className="text-red-500 font-bold hover:text-red-700"
-      >
-        ✕
-      </button>
-    </div>
-  ));
-}}
-                          
-                          className="px-4 py-2.5 rounded-2xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-amber-100 text-white font-extrabold text-xs tracking-tight transition-all shadow-sm hover:scale-102 flex items-center gap-1.5 cursor-pointer"
-                        >
-                          <Plus className="w-3.5 h-3.5 text-yellow-400 dark:text-red-600" />
-                          <span>Add to Cart</span>
-                        </button>
-                      )}
-                    </div>
-
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <AnimatePresence mode="popLayout">
+                  {items.map((item) => {
+                    const qty = getItemQuantity(item.id);
+                    return (
+                      <MenuCard
+                        key={item.id}
+                        item={item}
+                        qty={qty}
+                        onAddToCart={onAddToCart}
+                        onRemoveFromCart={onRemoveFromCart}
+                      />
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+            </div>
+          ))
         ) : (
           /* Empty / No Items Found Phase */
           <div className="text-center py-16 bg-stone-50 dark:bg-neutral-900/40 rounded-3xl border border-dashed border-stone-200 dark:border-neutral-800 max-w-lg mx-auto space-y-4">

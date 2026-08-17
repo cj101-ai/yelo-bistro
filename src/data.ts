@@ -11,9 +11,86 @@ export const FOOD_ITEMS: FoodItem[] = [
     price: 4500,
     image: "/images/Image Jun 22, 2026, 01_33_08 AM.png",
     category: "Noodles",
+    isFeatured: true,
     rating: 4.8,
     prepTime: "10 mins",
-    calories: 420
+    calories: 420,
+
+     options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "noodles-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-veggies",
+          name: "Extra-veggies",
+          price: 1500
+        },
+        {
+          id: "extra-noodles",
+          name: "Extra-noodles",
+          price: 1000
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-eggs",
+          name: "Fried Egg",
+          price: 1000
+        },
+        {
+          id: "extra-chicken",
+          name: "Extra Shredded Chicken",
+          price: 2500
+        },
+        {
+          id: "extra-sausage",
+          name: "Extra Sausage",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    },
+    
+  ]
   },
 {
     id: "nd-2",
@@ -24,7 +101,83 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Noodles",
     rating: 4.8,
     prepTime: "10 mins",
-    calories: 420
+    calories: 420,
+  options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "noodles-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-veggies",
+          price: 1500
+        },
+        {
+          id: "extra-noodles",
+          name: "Extra-noodles",
+          price: 1000
+        },
+        {
+          id: "extra-egg",
+          name: "Extra-Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-eggs",
+          name: "Fried Egg",
+          price: 1000
+        },
+        {
+          id: "extra-chicken",
+          name: "Extra Shredded Chicken",
+          price: 2500
+        },
+        {
+          id: "extra-sausage",
+          name: "Extra Sausage",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    },
+    
+  ]
   },
 
 {
@@ -36,7 +189,77 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Noodles",
     rating: 4.7,
     prepTime: "12 mins",
-    calories: 380
+    calories: 380,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "noodles-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-noodles",
+          name: "Extra-noodles",
+          price: 1000
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-eggs",
+          name: "Fried Egg",
+          price: 1000
+        },
+        {
+          id: "extra-Veggies",
+          name: "Extra-veggies",
+          price: 1500
+        },
+        
+        {
+          id: "extra-goatmeat",
+          name: "Extra-goatmeat",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    },
+    ]
   },
 {
     id: "nd-4",
@@ -47,7 +270,68 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Noodles",
     rating: 4.7,
     prepTime: "12 mins",
-    calories: 380
+    calories: 380,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "noodles-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-noodles",
+          name: "Extra-noodles",
+          price: 1000
+        },
+        {
+          id: "extra-egg",
+          name: "Extra-Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-eggs",
+          name: "Fried Egg",
+          price: 1000
+        },
+        
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    },
+    ]
+
   },
 
 {
@@ -59,23 +343,142 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Noodles",
     rating: 4.7,
     prepTime: "12 mins",
-    calories: 380
+    calories: 380,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "noodles-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-veggies",
+          name: "Extra-veggies",
+          price: 1500
+        },
+        {
+          id: "extra-noodles",
+          name: "Extra-noodles",
+          price: 1000
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-eggs",
+          name: "Fried Egg",
+          price: 1000
+        },
+        {
+          id: "extra-chicken",
+          name: "Extra Shredded Chicken",
+          price: 2500
+        },
+        {
+          id: "extra-sausage",
+          name: "Extra Sausage",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    },
+   
+    ]
+  
 },
 
 
  // Burgers Section
 
 {
-    id: "bg-1",
-    name: "Chicken Burger",
-    description: "Grilled chicken patty with melt cheese,layered with sauteed lettuce, tomatoes, caramelized onions,& Yelo's signature burger cream in a toasted bun.",
-    price: 5500,
-    image: "/images/IMG_E1319.JPG",
-    category: "Burgers",
-    rating: 4.9,
-    prepTime: "15 mins",
-    calories: 780
-  },
+  id: "bg-1",
+  name: "Chicken Burger",
+  description: "Grilled chicken patty with melt cheese,layered with sauteed lettuce, tomatoes, caramelized onions,& Yelo's signature burger cream in a toasted bun.",
+  price: 5500,
+  image: "/images/IMG_E1319.JPG",
+  isFeatured: true,
+  category: "Burgers",
+  rating: 4.9,
+  prepTime: "15 mins",
+  calories: 780,
+
+  options: [
+    { id: "Cream-level",
+      name: "Cream Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "Creamy",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Very Creamy",
+          price: 0
+        },]
+      },
+      {
+      id: "burger-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      choices: [
+        {
+          id: "extra-cheese",
+          name: "Extra Cheese",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "water",
+          price: 500
+        },
+        {
+          id: "extra-pepper sauce",
+          name: "pepper-sauce",
+          price: 1000
+        }
+        
+          ]
+    }
+  ]
+},
 
   {
     id: "bg-2",
@@ -86,7 +489,48 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Burgers",
     rating: 4.6,
     prepTime: "14 mins",
-    calories: 690
+    calories: 690,
+     options: [
+      { id: "Cream-level",
+      name: "Cream Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "Creamy",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Very Creamy",
+          price: 0
+        },]
+      },
+    {
+      id: "burger-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      choices: [
+        {
+          id: "extra-cheese",
+          name: "Extra Cheese",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "water",
+          price: 500
+        },
+        {
+          id: "extra-pepper sauce",
+          name: "pepper-sauce",
+          price: 1000
+        }
+      ]
+    }
+  ]
+
   },
   {
     id: "bg-3",
@@ -97,7 +541,47 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Burgers",
     rating: 4.6,
     prepTime: "14 mins",
-    calories: 690
+    calories: 690,
+     options: [
+      { id: "Cream-level",
+      name: "Cream Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "Creamy",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Very Creamy",
+          price: 0
+        },]
+      },
+    {
+      id: "burger-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      choices: [
+        {
+          id: "extra-cheese",
+          name: "Extra Cheese",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "water",
+          price: 500
+        },
+        {
+          id: "extra-pepper sauce",
+          name: " pepper-sauce",
+          price: 1000
+        }
+      ]
+    }
+  ]
   },
 
 // Shawarma Section
@@ -138,16 +622,76 @@ export const FOOD_ITEMS: FoodItem[] = [
 
   // Rice Meals Section
   {
-    id: "rm-1",
-    name: "Yelo Special FriedRice",
-    description: "Smoky, spicy pre-grilled asun(goat meat) tossed with vibrant bell peppers,mixed veggies and rice.",
-    price: 8500,
-    image: "/images/Image Jul 3, 2026, 06_39_03 PM.png",
-    category: "Rice Meals",
-    rating: 4.8,
-    prepTime: "15 mins",
-    calories: 610
-  },
+  id: "rm-1",
+  name: "Yelo Special FriedRice",
+  description: "Smoky, spicy pre-grilled asun(goat meat) tossed with vibrant bell peppers,mixed veggies and rice.",
+  price: 8500,
+  image: "/images/Image Jul 3, 2026, 06_39_03 PM.png",
+  category: "Rice Meals",
+  rating: 4.8,
+  prepTime: "15 mins",
+  calories: 610,
+
+  options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: " Egg",
+          price: 1000
+        },
+        {
+          id: "extra-Goatmeat",
+          name: "Extra-Goatmeat",
+          price: 2000
+        },
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
   {
     id: "rm-2",
     name: "Native rice",

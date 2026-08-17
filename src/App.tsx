@@ -11,13 +11,19 @@ import {
 } from 'lucide-react';
 
 import { FOOD_ITEMS, REVIEWS, CHOOSE_US_ITEMS } from './data';
-import { FoodItem, CartItem, OrderDetails } from './types';
+import {
+  FoodItem,
+  CartItem,
+  OrderDetails,
+  SelectedFoodOption
+} from './types';
 
 // Page Components
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import ExploreMenuSlider from "./components/ExploreMenuSlider";
 import MenuSection from './components/MenuSection';
+import ProductOptionsModal from './components/ProductOptionsModal';
+import FeaturedCarousel from "./components/FeaturedCarousel";
 import AboutSection from './components/AboutSection';
 import ContactSection from './components/ContactSection';
 import CartSidebar from './components/CartSidebar';
@@ -70,47 +76,132 @@ export default function App() {
     }
   };
 
-  const handleAddToCart = (item: FoodItem) => {
-    const existing = cart.find(c => c.item.id === item.id);
-    let updated: CartItem[];
-    if (existing) {
-      updated = cart.map(c => c.item.id === item.id ? { ...c, quantity: c.quantity + 1 } : c);
-    } else {
-      updated = [...cart, { item, quantity: 1 }];
-    }
-    saveCartToStorage(updated);
-    {
-    }
-  };
+  const [customizingItem, setCustomizingItem] =
+  React.useState<FoodItem | null>(null);
+
+const handleAddToCart = (item: FoodItem) => {
+  // Items with customization options open the modal.
+  if (item.options && item.options.length > 0) {
+    setCustomizingItem(item);
+    return;
+  }
+
+  // Items without options go directly into the cart.
+  addItemToCart(item, [], item.price, 1);
+};
+
+const addItemToCart = (
+  item: FoodItem,
+  selectedOptions: SelectedFoodOption[],
+  unitPrice: number,
+  quantity: number
+) => {
+  const optionsKey = selectedOptions
+    .map(
+      (option) =>
+        `${option.groupId}:${option.choiceId}`
+    )
+    .sort()
+    .join('|');
+
+  const cartItemId = optionsKey
+    ? `${item.id}__${optionsKey}`
+    : item.id;
+
+  const existing = cart.find(
+    (cartItem) => cartItem.cartItemId === cartItemId
+  );
+
+  let updated: CartItem[];
+
+  if (existing) {
+    updated = cart.map((cartItem) =>
+      cartItem.cartItemId === cartItemId
+        ? {
+            ...cartItem,
+            quantity: cartItem.quantity + quantity
+          }
+        : cartItem
+    );
+  } else {
+    updated = [
+      ...cart,
+      {
+        item,
+        quantity,
+        selectedOptions,
+        unitPrice,
+        cartItemId
+      }
+    ];
+  }
+
+  saveCartToStorage(updated);
+};
 
 
   const handleRemoveFromCart = (item: FoodItem) => {
-    const existing = cart.find(c => c.item.id === item.id);
-    if (!existing) return;
-    
-    let updated: CartItem[];
-    if (existing.quantity === 1) {
-      updated = cart.filter(c => c.item.id !== item.id);
-    } else {
-      updated = cart.map(c => c.item.id === item.id ? { ...c, quantity: c.quantity - 1 } : c);
-    }
-    saveCartToStorage(updated);
-  };
+  const matchingItems = cart.filter(
+    (cartItem) => cartItem.item.id === item.id
+  );
 
-  const handleUpdateQuantity = (itemId: string, qty: number) => {
-    let updated: CartItem[];
-    if (qty <= 0) {
-      updated = cart.filter(c => c.item.id !== itemId);
-    } else {
-      updated = cart.map(c => c.item.id === itemId ? { ...c, quantity: qty } : c);
-    }
-    saveCartToStorage(updated);
-  };
+  if (matchingItems.length === 0) return;
 
-  const handleRemoveItem = (itemId: string) => {
-    const updated = cart.filter(c => c.item.id !== itemId);
-    saveCartToStorage(updated);
-  };
+  // Remove one from the most recently added matching configuration.
+  const existing = matchingItems[matchingItems.length - 1];
+
+  let updated: CartItem[];
+
+  if (existing.quantity === 1) {
+    updated = cart.filter(
+      (cartItem) =>
+        cartItem.cartItemId !== existing.cartItemId
+    );
+  } else {
+    updated = cart.map((cartItem) =>
+      cartItem.cartItemId === existing.cartItemId
+        ? {
+            ...cartItem,
+            quantity: cartItem.quantity - 1
+          }
+        : cartItem
+    );
+  }
+
+  saveCartToStorage(updated);
+};
+
+  const handleUpdateQuantity = (
+  cartItemId: string,
+  qty: number
+) => {
+  let updated: CartItem[];
+
+  if (qty <= 0) {
+    updated = cart.filter(
+      (item) => item.cartItemId !== cartItemId
+    );
+  } else {
+    updated = cart.map((item) =>
+      item.cartItemId === cartItemId
+        ? {
+            ...item,
+            quantity: qty
+          }
+        : item
+    );
+  }
+
+  saveCartToStorage(updated);
+};
+
+  const handleRemoveItem = (cartItemId: string) => {
+  const updated = cart.filter(
+    (cartItem) => cartItem.cartItemId !== cartItemId
+  );
+
+  saveCartToStorage(updated);
+};
 
   const handlePlaceOrder = (order: OrderDetails) => {
 
@@ -133,11 +224,22 @@ export default function App() {
 
   message += `🛒 *Items Ordered*\n`;
 
-  order.items.forEach(({ item, quantity }) => {
+  order.items.forEach(
+  ({ item, quantity, selectedOptions, unitPrice }) => {
     message += `• ${item.name} x${quantity} - ₦${(
-      item.price * quantity
-    ).toFixed(2)}\n`;
-  });
+      unitPrice * quantity
+    ).toLocaleString()}\n`;
+
+    if (
+      selectedOptions &&
+      selectedOptions.length > 0
+    ) {
+      selectedOptions.forEach((option) => {
+        message += `   - ${option.groupName}: ${option.choiceName}\n`;
+      });
+    }
+  }
+);
 
   message += `\n💰 Total: ₦${order.total.toFixed(2)}\n`;
   message += ` Mode of Recieval: ${order. paymentMethod}\n`;
@@ -183,7 +285,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-neutral-950 text-stone-800 dark:text-neutral-100 font-sans transition-colors duration-300 flex flex-col justify-between">
+    <div className="min-h-screen bg-stone-50 dark:bg-neutral-950 text-stone-800 dark:text-neutral-100 font-sans transition-colors duration-300 flex flex-col">
       
       {/* Top sticky responsive Navbar */}
       <Navbar 
@@ -195,6 +297,19 @@ export default function App() {
         setDarkMode={setDarkMode}
         activeOrder={!!activeOrder}
       />
+      <ProductOptionsModal
+  isOpen={!!customizingItem}
+  item={customizingItem}
+  onClose={() => setCustomizingItem(null)}
+  onAddToCart={(item, selectedOptions, unitPrice, quantity) => {
+    addItemToCart(
+      item,
+      selectedOptions,
+      unitPrice,
+      quantity
+    );
+  }}
+/>
 
       {/* Slide-out Cart Drawer Panel */}
       <CartSidebar 
@@ -218,7 +333,6 @@ export default function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="space-y-16"
               id="home-tab-wrapper"
             >
               {/* Giant Delicious Food Hero */}
@@ -226,39 +340,13 @@ export default function App() {
                 onOrderNow={() => setActiveTab('menu')} 
                 onViewMenu={() => setActiveTab('menu')} 
               />
-              <ExploreMenuSlider
-               setActiveTab={setActiveTab}
-              />
-
-              {/*Choose Us highlights 
-              <section className="py-12 bg-white dark:bg-neutral-900/10" id="why-choose-us-section">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-                    <span className="text-red-500 font-extrabold text-xs uppercase tracking-widest font-mono">The Yelo Difference</span>
-                    <h2 className="text-3xl sm:text-4xl font-black text-stone-900 dark:text-white tracking-tight">Why Choose Yelo Bistro & Cafe</h2>
-                    <p className="text-stone-500 dark:text-neutral-400 text-sm">
-                      We optimize every step from order placement to food preparation to packaging and delivery to ensure a 5⭐ star-grade quality.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {CHOOSE_US_ITEMS.map((item) => (
-                      <div 
-                        key={item.title}
-                        className="p-6 rounded-3xl bg-stone-50 dark:bg-neutral-900/40 border border-stone-200/40 dark:border-neutral-800 flex flex-col justify-between hover:shadow-lg transition-shadow group h-full"
-                      >
-                        <div className="space-y-4">
-                          <div className="w-12 h-12 rounded-2xl bg-white dark:bg-neutral-950 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                            {getIconComponent(item.icon)}
-                          </div>
-                          <h3 className="font-extrabold text-base text-stone-900 dark:text-white">{item.title}</h3>
-                          <p className="text-xs text-stone-500 dark:text-neutral-400 leading-relaxed font-sans">{item.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section> */}
+              
+              
+              <FeaturedCarousel
+  cart={cart}
+  onAddToCart={handleAddToCart}
+  onRemoveFromCart={handleRemoveFromCart}
+/>
               
 
               {/* Compact Featured Food Showcase */}
@@ -266,13 +354,13 @@ export default function App() {
                 onAddToCart={handleAddToCart} 
                 onRemoveFromCart={handleRemoveFromCart} 
                 cart={cart}
-                compact={true} 
+              
               />
 
-              {/* Delivery Promotion Card Banner */}
+              {/* Delivery Promotion Card Banner 
               <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="delivery-highlight-banner">
                 <div className="rounded-3xl bg-gradient-to-r from-red-650 from-red-650 bg-neutral-900 dark:bg-neutral-900/60 p-8 sm:p-12 text-white relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
-                  {/* Background overlay decorations */}
+                  {/* Background overlay decorations 
                   <div className="absolute top-0 right-0 w-80 h-80 bg-yellow-400/10 rounded-full blur-3xl pointer-events-none"></div>
                   
                   <div className="space-y-4 max-w-xl text-center lg:text-left">
@@ -299,7 +387,7 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-              </section>
+              </section> */}
               {}
 
 
@@ -373,19 +461,7 @@ export default function App() {
       {/* Persistent floating chat WhatsApp on bottom right */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 pointer-events-none" id="floating-widgets">
         
-        {/* Active Order alert shortcut bubble */}
-        {/*activeOrder && activeTab !== 'track' && (
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            onClick={() => setActiveTab('track')}
-            className="p-3 bg-red-500 hover:bg-red-650 text-white rounded-full shadow-xl flex items-center justify-center gap-1.5 pointer-events-auto cursor-pointer font-bold text-xs"
-          >
-            <Truck className="w-5 h-5 animate-bounce" />
-            <span>Track Live Order</span>
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-ping"></span>
-          </motion.button>
-        )*/}
+        
 
         {/* WhatsApp chat popup */}
         <div className="relative pointer-events-auto">

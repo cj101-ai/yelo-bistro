@@ -4,7 +4,7 @@ import { CartItem } from '../types';
 import Logo from './Logo';
 
 interface NavbarProps {
-  activeTab: 'home' | 'menu' | 'about' | 'contact' | 'track';
+  activeTab: 'home' | '' | 'about' | 'contact' | 'track';
   setActiveTab: (tab: 'home' | 'menu' | 'about' | 'contact' | 'track') => void;
   cart: CartItem[];
   setIsCartOpen: (open: boolean) => void;
@@ -23,7 +23,23 @@ export default function Navbar({
   activeOrder
 }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  // 1. Fixed error: Declared missing isScrolled state
+  const [isScrolled, setIsScrolled] = React.useState(false); 
   const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  // 2. Fixed error: Added window scroll listener to track scroll position
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -33,7 +49,13 @@ export default function Navbar({
   ] as const;
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 dark:bg-neutral-950/90 border-b border-stone-200/60 dark:border-neutral-800 transition-colors duration-300">
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
+        isScrolled
+          ? 'bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md border-b border-stone-200/60 dark:border-neutral-800 shadow-md'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20" id="navbar-container">
           
@@ -48,7 +70,7 @@ export default function Navbar({
               <div className="flex items-center font-extrabold text-2xl tracking-tight">
                 <span className="text-yellow-500 dark:text-yellow-400">Yelo</span>
                 <span className="text-red-600 dark:text-red-500">Bistro</span>
-                <span className="text-stone-900 dark:text-white">.</span>
+                <span className={`transition-colors duration-300 ${isScrolled ? 'text-stone-900 dark:text-white' : 'text-white'}`}>.</span>
               </div>
             </div>
           </div>
@@ -63,7 +85,9 @@ export default function Navbar({
                 className={`relative py-2 font-medium text-sm transition-all duration-200 outline-none cursor-pointer ${
                   activeTab === item.id 
                     ? 'text-red-500 dark:text-yellow-400 font-bold' 
-                    : 'text-stone-600 hover:text-stone-900 dark:text-neutral-300 dark:hover:text-white'
+                    : isScrolled
+                      ? 'text-stone-600 hover:text-stone-900 dark:text-neutral-300 dark:hover:text-white'
+                      : 'text-white/90 hover:text-white drop-shadow-sm'
                 }`}
               >
                 {item.label}
@@ -72,23 +96,6 @@ export default function Navbar({
                 )}
               </button>
             ))}
-
-            {/* Active order tracker badge shortcut if active order is present */}
-            {/*activeOrder && (
-              <button
-                id="nav-track-badge"
-                onClick={() => setActiveTab('track')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${
-                  activeTab === 'track'
-                    ? 'bg-red-500 text-white animate-pulse'
-                    : 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-400 border border-green-200 dark:border-green-900'
-                }`}
-              >
-                <Truck className="w-3.5 h-3.5 animate-bounce" />
-                <span>Track Order</span>
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
-              </button>
-            )*/}
           </nav>
 
           {/* Action Buttons: Dark Mode + Cart + Mobile menu toggle */}
@@ -98,10 +105,14 @@ export default function Navbar({
             <button
               id="theme-toggler"
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2.5 rounded-xl border border-stone-200/60 dark:border-neutral-800 text-stone-600 dark:text-neutral-300 hover:bg-stone-50 dark:hover:bg-neutral-900 hover:text-stone-900 dark:hover:text-white transition-all cursor-pointer"
+              className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                isScrolled 
+                  ? 'border-stone-200/60 dark:border-neutral-800 text-stone-600 dark:text-neutral-300 hover:bg-stone-50 dark:hover:bg-neutral-900 hover:text-stone-900 dark:hover:text-white' 
+                  : 'border-white/30 text-white hover:bg-white/10'
+              }`}
               title="Toggle theme"
             >
-              {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-stone-700" />}
+              {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5" />}
             </button>
 
             {/* Shopping Cart Button */}
@@ -122,7 +133,11 @@ export default function Navbar({
             <button
               id="mobile-menu-toggle"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2.5 rounded-xl border border-stone-200/60 dark:border-neutral-800 text-stone-600 dark:text-neutral-300 hover:bg-stone-50 md:hidden transition-all cursor-pointer"
+              className={`p-2.5 rounded-xl border md:hidden transition-all cursor-pointer ${
+                isScrolled 
+                  ? 'border-stone-200/60 dark:border-neutral-800 text-stone-600 dark:text-neutral-300 hover:bg-stone-50' 
+                  : 'border-white/30 text-white hover:bg-white/10'
+              }`}
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -160,13 +175,9 @@ export default function Navbar({
                 setIsMobileMenuOpen(false);
               }}
             >
-             {/*<div className="flex items-center gap-2">
-                <Truck className="w-5 h-5" />
-                <span>Track Active Order</span>
-              </div>*/}
               <span className="w-2.5 h-2.5 bg-white rounded-full animate-ping"></span>
             </button> 
-             )}
+          )}
         </div>
       )}
     </header>

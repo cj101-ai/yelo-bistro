@@ -52,7 +52,7 @@ export default function ContactSection() {
 
   // Quick WhatsApp text generator
   const triggerWhatsApp = () => {
-    const text = "Hello Yelo Bistro! I would like to place an order.";
+    const text = "Hello Yelo Bistro! .";
     const url = `https://wa.me/2349069125598?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
@@ -131,7 +131,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-extrabold text-lg">Instant WhatsApp Order</h4>
-                  <p className="text-small text-white/80">Skip the lines, if you would like to customize your order speak directly to us</p>
+                  <p className="text-small text-white/80">Skip the lines, lets have a chat </p>
                 </div>
               </div>
               
@@ -251,24 +251,24 @@ export default function ContactSection() {
 
             </div>
 
-            {/* Illustrated Map section with Delivery Zones */}
+            {/* Illustrated Map section with Delivery Zones 
             <div className="p-6 bg-stone-50 dark:bg-neutral-900/40 border border-stone-200/50 dark:border-neutral-800 rounded-3xl space-y-4" id="delivery-map-container">
               <div>
                 <h4 className="font-extrabold text-sm text-stone-900 dark:text-white uppercase tracking-wider font-mono">Our Active  Zone Map</h4>
                 <p className="text-xs text-stone-500 dark:text-neutral-400"></p>
               </div>
 
-              {/* Vector Grid Map Mock */}
+              * Vector Grid Map Mock *
               <div className="relative border border-stone-200/60 dark:border-neutral-800/80 rounded-2xl aspect-[16/9] overflow-hidden bg-stone-100 dark:bg-neutral-950 flex flex-col items-center justify-center p-4 text-center">
                 
-                {/* Simulated Grid Lines */}
+                * Simulated Grid Lines 
                 <div className="absolute inset-0 bg-linear-to-b from-stone-200/30 dark:from-neutral-900/20 to-transparent bg-[size:20px_20px] pointer-events-none" />
                 
-                {/* Radial rings */}
+                {/* Radial rings 
                 <div className="absolute w-44 h-44 rounded-full border border-dashed border-yellow-400/35 dark:border-yellow-400/20 animate-pulse" />
                 <div className="absolute w-72 h-72 rounded-full border border-dashed border-red-400/25 dark:border-red-400/10" style={{ animationDuration: '8s' }} />
 
-                {/* Legend details */}
+                * Legend details 
                 <div className="absolute bottom-3 left-3 bg-white/95 dark:bg-neutral-950/95 p-3 rounded-xl border border-stone-200/60 dark:border-neutral-800 shadow-sm text-left max-w-[140px] space-y-1 pointer-events-none z-10">
                   <div className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 bg-yellow-400 rounded-full"></span>
@@ -281,7 +281,7 @@ export default function ContactSection() {
                   <p className="text-[8px] text-stone-400 select-none">Outside? Contact us! </p>
                 </div>
 
-                {/* Map center Pin representing Yelo Bistro */}
+                {/* Map center Pin representing Yelo Bistro 
                 <div className="relative z-10 flex flex-col items-center gap-1.5">
                   <div className="relative flex items-center justify-center w-12 h-12 bg-yellow-400 text-neutral-950 rounded-2xl shadow-xl animate-bounce">
                     <Clock className="w-6 h-6 text-red-600" />
@@ -290,10 +290,9 @@ export default function ContactSection() {
                     <h5 className="font-extrabold text-xs text-stone-900 dark:text-white">Yelo Central Kitchen</h5>
                     <p className="text-[9px] text-stone-500 dark:text-neutral-400">42 country home road</p>
                   </div>
-                </div>
-
+                </div>*
               </div>
-            </div>
+            </div>*/}
 
           </div>
 
