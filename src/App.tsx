@@ -79,15 +79,9 @@ export default function App() {
   const [customizingItem, setCustomizingItem] =
   React.useState<FoodItem | null>(null);
 
+//
 const handleAddToCart = (item: FoodItem) => {
-  // Items with customization options open the modal.
-  if (item.options && item.options.length > 0) {
-    setCustomizingItem(item);
-    return;
-  }
-
-  // Items without options go directly into the cart.
-  addItemToCart(item, [], item.price, 1);
+  setCustomizingItem(item);
 };
 
 const addItemToCart = (
@@ -259,7 +253,7 @@ const addItemToCart = (
   saveCartToStorage([]);
 
   // Keep your tracking page working
-  setActiveTab("menu");
+  setActiveTab("home");
 };
 
   const handleResetOrder = () => {
@@ -269,8 +263,8 @@ const addItemToCart = (
     } catch (e) {
       console.warn(e);
     }
-    // Redirect to menu to start fresh
-    setActiveTab('menu');
+    // Redirect to main menu to start fresh
+    setActiveTab('home');
   };
 
   // Quick helper to map icon name string to Lucide component
@@ -325,7 +319,7 @@ const addItemToCart = (
       <main className="flex-grow">
         <AnimatePresence mode="wait">
           
-          {/* Home Tab View */}
+          {/* Main Menu Tab View (Contains all Hero, Featured, and Full Menu content) */}
           {activeTab === 'home' && (
             <motion.div
               key="tab-home"
@@ -335,74 +329,20 @@ const addItemToCart = (
               transition={{ duration: 0.3 }}
               id="home-tab-wrapper"
             >
-              {/* Giant Delicious Food Hero */}
+              {/* Hero Banner */}
               <Hero 
-                onOrderNow={() => setActiveTab('menu')} 
-                onViewMenu={() => setActiveTab('menu')} 
+                onOrderNow={() => setActiveTab('home')} 
+                onViewMenu={() => setActiveTab('home')} 
               />
               
-              
+              {/* Featured Carousel */}
               <FeaturedCarousel
-  cart={cart}
-  onAddToCart={handleAddToCart}
-  onRemoveFromCart={handleRemoveFromCart}
-/>
-              
-
-              {/* Compact Featured Food Showcase */}
-              <MenuSection 
-                onAddToCart={handleAddToCart} 
-                onRemoveFromCart={handleRemoveFromCart} 
                 cart={cart}
-              
+                onAddToCart={handleAddToCart}
+                onRemoveFromCart={handleRemoveFromCart}
               />
-
-              {/* Delivery Promotion Card Banner 
-              <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="delivery-highlight-banner">
-                <div className="rounded-3xl bg-gradient-to-r from-red-650 from-red-650 bg-neutral-900 dark:bg-neutral-900/60 p-8 sm:p-12 text-white relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
-                  {/* Background overlay decorations 
-                  <div className="absolute top-0 right-0 w-80 h-80 bg-yellow-400/10 rounded-full blur-3xl pointer-events-none"></div>
-                  
-                  <div className="space-y-4 max-w-xl text-center lg:text-left">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-400 text-neutral-950 font-bold text-[10px] uppercase tracking-widest rounded-full font-mono">
-                      <span>Your Order is Guaranteed</span>
-                    </div>
-                    <h3 className="text-2xl sm:text-3xl font-black tracking-tight leading-snug">
-                      Your Tasty Dishes Delivered Right To Your Comfort Zone!
-                    </h3>
-                  </div>
-
-                  <div className="shrink-0 flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-                    <button
-                      onClick={() => setActiveTab('menu')}
-                      className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-yellow-400 hover:bg-yellow-500 text-neutral-950 font-black text-sm tracking-tight transition-all shadow shadow-yellow-400/20 cursor-pointer"
-                    >
-                      Place Delivery Now
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('contact')}
-                      className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-sm tracking-tight transition-all"
-                    >
-                      Check active coverage map
-                    </button>
-                  </div>
-                </div>
-              </section> */}
-              {}
-
-
-            </motion.div>
-          )}
-
-          {/* Menu Tab View */}
-          {activeTab === 'menu' && (
-            <motion.div
-              key="tab-menu"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25 }}
-            >
+              
+              {/* Full Food Menu Showcase */}
               <MenuSection 
                 onAddToCart={handleAddToCart} 
                 onRemoveFromCart={handleRemoveFromCart} 
@@ -454,15 +394,12 @@ const addItemToCart = (
             </motion.div>
           ) }
         
-
         </AnimatePresence>
       </main>
 
       {/* Persistent floating chat WhatsApp on bottom right */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 pointer-events-none" id="floating-widgets">
         
-        
-
         {/* WhatsApp chat popup */}
         <div className="relative pointer-events-auto">
           <AnimatePresence>
@@ -510,7 +447,7 @@ const addItemToCart = (
             className="p-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center pointer-events-auto cursor-pointer"
             title="Open Kitchen Live Chat"
           >
-            <FaWhatsapp size={28} color="white"  className="w-6 h-6" />
+            <FaWhatsapp size={28} color="white" className="w-6 h-6" />
           </button>
         </div>
 
@@ -518,12 +455,12 @@ const addItemToCart = (
 
       {/* Global persistent Footer Component */}
       <Footer setActiveTab={(tab) => { setActiveTab(tab); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
-        <Toaster
-  position="top-right"
-  toastOptions={{
-    duration: 3000,
-  }}
-/>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+        }}
+      />
 
     </div>
   );

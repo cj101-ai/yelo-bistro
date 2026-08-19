@@ -594,8 +594,54 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Shawarma",
     rating: 4.9,
     prepTime: "11 mins",
-    calories: 540
+    calories: 540,
+    options: [
+      { id: "Cream-level",
+      name: "Cream Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "Creamy",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Very Creamy",
+          price: 0
+        },]
+      },
+    {
+      id: "Shawarma-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      choices: [
+        {
+          id: "extra-sausage",
+          name: "Extra sausage",
+          price: 1000
+        },
+        {
+          id: "extra shredded chicken",
+          name: "Extra-Shredded chicken",
+          price: 2500
+        },
+        {
+          id: "extra-pepper sauce",
+          name: " pepper-sauce",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
   },
+
   {
     id: "sh-2",
     name: "Turkey Sharwama",
@@ -605,7 +651,52 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Shawarma",
     rating: 4.7,
     prepTime: "10 mins",
-    calories: 820
+    calories: 820,
+   options: [
+      { id: "Cream-level",
+      name: "Cream Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "Creamy",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Very Creamy",
+          price: 0
+        },]
+      },
+    {
+      id: "shawarma-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      choices: [
+        {
+          id: "extra-sausage",
+          name: "Extra sausage",
+          price: 1000
+        },
+        {
+          id: "extra shredded chicken",
+          name: "Extra-Shredded chicken",
+          price: 2500
+        },
+        {
+          id: "extra-pepper sauce",
+          name: " pepper-sauce",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
   },
   
   {
@@ -617,8 +708,54 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Shawarma",
     rating: 4.7,
     prepTime: "10 mins",
-    calories: 820
+    calories: 820,
+    options: [
+      { id: "Cream-level",
+      name: "Cream Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "Creamy",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Very Creamy",
+          price: 0
+        },]
+      },
+    {
+      id: "shawarma-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      choices: [
+        {
+          id: "extra-sausage",
+          name: "Extra sausage",
+          price: 1000
+        },
+        {
+          id: "extra shredded chicken",
+          name: "Extra-Shredded chicken",
+          price: 2500
+        },
+        {
+          id: "extra-pepper sauce",
+          name: " pepper-sauce",
+          price: 1000
+        },
+        {
+          id: "Water",
+          name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
   },
+  
 
   // Rice Meals Section
   {
@@ -670,13 +807,13 @@ export const FOOD_ITEMS: FoodItem[] = [
         },
         {
           id: "extra-egg",
-          name: " Egg",
+          name: "Boiled Egg",
           price: 1000
         },
         {
           id: "extra-Goatmeat",
           name: "Extra-Goatmeat",
-          price: 2000
+          price: 3000
         },
         {
           id: "extra-veggies",
@@ -701,9 +838,60 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Rice Meals",
     rating: 4.7,
     prepTime: "16 mins",
-    calories: 720
-  },
+    calories: 720,
+     options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
 
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: " Extra-Egg",
+          price: 1000
+        },
+      
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
+  
   {
     id: "rm-3",
     name: "Jollof Coconut Rice",
@@ -713,8 +901,64 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Rice Meals",
     rating: 4.7,
     prepTime: "16 mins",
-    calories: 720
-  },
+    calories: 720,
+     options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-Goatmeat",
+          name: "Extra-Goatmeat",
+          price: 3000
+        },
+    
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
 
 
 {
@@ -726,8 +970,65 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Rice Meals",
     rating: 4.7,
     prepTime: "16 mins",
-    calories: 720
-  },
+    calories: 720,
+     options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+ 
+  
   {
     id: "rm-5",
     name: "ChineseRice With ChickenBreast",
@@ -737,8 +1038,69 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Rice Meals",
     rating: 4.7,
     prepTime: "16 mins",
-    calories: 720
-  },
+    calories: 720,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-chicken",
+          name: "Extra-chicken",
+          price: 2500
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
   {
     id: "rm-6",
     name: "Coconut Rice",
@@ -748,8 +1110,65 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Rice Meals",
     rating: 4.7,
     prepTime: "16 mins",
-    calories: 720
-  },
+    calories: 720,
+     options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+ 
+  
   {
     id: "rm-7",
     name: "Jollof Rice",
@@ -759,10 +1178,61 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Rice Meals",
     rating: 4.7,
     prepTime: "16 mins",
-    calories: 720
-  },
+    calories: 720,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
 
-
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        
+        
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+ 
  // Wings Section
    {
     id: "wg-1",
@@ -773,8 +1243,55 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+     options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+       
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
   {
     id: "wg-2",
     name: "Pepper Wings",
@@ -784,8 +1301,62 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.9,
     prepTime: "5 mins",
-    calories: 140
-  },
+    calories: 140,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "extra pepper sauce",
+          name: "Extra-pepper Sauce",
+          price: 1000
+        },
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+       
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
+
   {
     id: "wg-3",
     name: "Sweet Wings",
@@ -795,8 +1366,36 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
+  
   {
     id: "wg-4",
     name: "Cripsy Wings",
@@ -806,8 +1405,35 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+    options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
   {
     id: "wg-5",
     name: "Lemon Pepper Wings",
@@ -817,8 +1443,63 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },{
+    calories: 90,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "extra pepper sauce",
+          name: "Extra-pepper Sauce",
+          price: 1000
+        },
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+       
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
+
+  {
     id: "wg-6",
     name: "Honey Chill BBQ Wings",
     description: "12 pieces of smoky,sweet,and tangy wings slathered in a rich BBQ sauce,paired with creamy ranch dip for a crowd pleasing classic.",
@@ -827,8 +1508,35 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
   {
     id: "wg-7",
     name: "Jerk Wings",
@@ -838,8 +1546,35 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
 
 {
     id: "wg-8",
@@ -850,8 +1585,35 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Wings",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
   {
     id: "wg-9",
     name: "Teriyaki Wings",
@@ -862,8 +1624,35 @@ export const FOOD_ITEMS: FoodItem[] = [
     isFeatured: true,
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
 
   // CockTail wings Section
   {
@@ -875,8 +1664,35 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Cocktail Wings",
     rating: 4.9,
     prepTime: "8 mins",
-    calories: 510
-  },
+    calories: 510,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
   {
     id: "cwg-2",
     name: "Mojito Wings",
@@ -887,7 +1703,34 @@ export const FOOD_ITEMS: FoodItem[] = [
     isFeatured: true,
     rating: 4.9,
     prepTime: "8 mins",
-    calories:510
+    calories:510,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+
   },
   {
     id: "cwg-3",
@@ -898,8 +1741,35 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Cocktail Wings",
     rating: 4.9,
     prepTime: "8 mins",
-    calories: 510
-  },
+    calories: 510,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
   {
     id: "cwg-4",
     name: "Pina Colada Wings",
@@ -909,8 +1779,34 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Cocktail Wings",
     rating: 4.9,
     prepTime: "8 mins",
-    calories: 510
-  },
+    calories: 510,
+     options: [
+    
+
+    {
+      id: "wings-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+       
+        {
+          id: "extra dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
 //Pasta Section
 
   {
@@ -922,8 +1818,61 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Pasta",
     rating: 4.7,
     prepTime: "6 mins",
-    calories: 395
-  },
+    calories: 395,
+     options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "Pasta-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Extra-Egg",
+          price: 1000
+        },
+        
+        
+  
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
   {
     id: "ps-2",
     name: "Stir-Fry Pasta",
@@ -933,8 +1882,75 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Pasta",
     rating: 4.7,
     prepTime: "6 mins",
-    calories: 395
-  },
+    calories: 395,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-chicken",
+          name: "Extra-Shredded Chicken",
+          price: 2500
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        {
+          id: "extra-Sausage",
+          name: "Extra-Sausage",
+          price: 1500
+        },
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
+  
   {
     id: "ps-3",
     name: "Jollof Pasta",
@@ -944,8 +1960,74 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Pasta",
     rating: 4.7,
     prepTime: "6 mins",
-    calories: 395
-  },
+    calories: 395,
+options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-chicken",
+          name: "Extra-Shredded Chicken",
+          price: 2500
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        {
+          id: "extra-Sausage",
+          name: "Extra-Sausage",
+          price: 1500
+        },
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+  
   {
     id: "ps-4",
     name: "Asun Pasta",
@@ -956,8 +2038,75 @@ export const FOOD_ITEMS: FoodItem[] = [
     isFeatured: true,
     rating: 4.7,
     prepTime: "6 mins",
-    calories: 395
-  },
+    calories: 395,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "turkey",
+          name: "Spicy Turkey",
+          price: 6800
+        },
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-Goatmeat",
+          name: "Extra-Goatmeat",
+          price: 2500
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        {
+          id: "extra-Sausage",
+          name: "Extra-Sausage",
+          price: 1500
+        },
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
+  
   //Combo Deal Section
  {
     id: "cd-1",
@@ -969,8 +2118,65 @@ export const FOOD_ITEMS: FoodItem[] = [
     isFeatured: true,
     rating: 4.7,
     prepTime: "6 mins",
-    calories: 395
-  },
+    calories: 395,
+  options: [
+    {
+      id: "cream-level",
+      name: "Burger Cream Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "Creamy",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Very Creamy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "combo-addons",
+      name: "Extra Add-ons Burger",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "Extra cheese",
+          name: "Extra-cheese",
+          price: 1000
+        },
+        {
+          id: "extra-Pepper sauce",
+          name: "Pepper sauce",
+          price: 1000
+        },
+        
+    
+      ]
+    },
+    {
+      id: "combo-addons",
+      name: "I Would Like",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "Extra Chips",
+          name: "Extra-Chips",
+          price: 2000
+        },
+    
+        
+    
+      ]
+    }
+  ]
+},
   {
     id: "cd-2",
     name: "Yelo Big Treat",
@@ -980,8 +2186,71 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Combo Deals",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  }, 
+    calories: 90,
+     options: [
+    {
+      id: "rice-level",
+      name: "Rice spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: " very spicy",
+          name: "Very spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "combo-addons",
+      name: "Extra Add-ons Rice",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "Extra Goatmeat",
+          name: "Extra-Goatmeat",
+          price: 3000
+        },
+        {
+          id: "extra-Veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+        
+    
+      ]
+    },
+    {
+      id: "combo-addons",
+      name: "Extra Add-ons WINGS",
+      type: "checkbox",
+      required: false,
+      choices: [
+        {
+          id: "Extra Dipping sauce",
+          name: "Extra-Dipping Sauce",
+          price: 1500
+        },
+    
+        
+    
+      ]
+    }
+  ]
+},
+    
   //protein Section
   {
     id: "pr-1",
@@ -1039,8 +2308,44 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Specials",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+    options: [
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+        
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-Goatmeat",
+          name: "Extra-Goatmeat",
+          price: 2500
+        },
+        
+        {
+          id: "extra-veggies",
+          name: "Extra-Veggies",
+          price: 1500
+        },
+    
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
+  
   {
     id: "sp-4",
     name: "Sweet Potatoes & GoatMeat Pepper Sauce",
@@ -1050,8 +2355,62 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Specials",
     rating: 4.8,
     prepTime: "4 mins",
-    calories: 90
-  },
+    calories: 90,
+    options: [
+    {
+      id: "spice-level",
+      name: "Spice Level",
+      type: "radio",
+      required: true,
+      choices: [
+        {
+          id: "mild",
+          name: "little",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "Medium",
+          price: 0
+        },
+        {
+          id: "hot",
+          name: "Very Spicy",
+          price: 0
+        }
+      ]
+    },
+
+    {
+      id: "rice-addons",
+      name: "Extra Add-ons",
+      type: "checkbox",
+      required: false,
+      choices: [
+  
+        {
+          id: "extra-egg",
+          name: "Boiled Egg",
+          price: 1000
+        },
+        {
+          id: "extra-Goatmeat",
+          name: "Extra-Goatmeat",
+          price: 2500
+        },
+    
+      
+        {
+          id: "Water",
+         name: "Water",
+          price: 500
+        }
+      ]
+    }
+  ]
+},
+
+  
   //Breakfast section
   {
     id: "bf-1",
@@ -1062,7 +2421,8 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "BreakFast",
     rating: 4.7,
     prepTime: "6 mins",
-    calories: 395
+    calories: 395,
+     options: []
   },
   {
     id: "bf-2",
@@ -1097,7 +2457,33 @@ export const FOOD_ITEMS: FoodItem[] = [
     category: "Juice & Drinks",
     rating: 4.7,
     prepTime: "6 mins",
-    calories: 395
+    calories: 395,
+    options: [
+    {
+      id: "rice-level",
+      name: "",
+      type: "radio",
+      required: false,
+      choices: [
+        {
+          id: "",
+          name: "",
+          price: 0
+        },
+        {
+          id: "medium",
+          name: "",
+          price: 0
+        },
+        {
+          id: " ",
+          name: "",
+          price: 0
+        }
+      ]
+    },
+  ]
+  
   },
 
   {

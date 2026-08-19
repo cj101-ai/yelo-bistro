@@ -2,12 +2,14 @@ import React from 'react';
 import emailjs from "@emailjs/browser";
 import { FaWhatsapp } from "react-icons/fa";
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, Phone, Clock, MapPin, Send, MessageSquare, ShieldCheck, Heart, Sparkles } from 'lucide-react';
+import { Mail, Phone, Clock, MapPin, Send, ShieldCheck, Heart, ChevronDown } from 'lucide-react';
 
 export default function ContactSection() {
   const [formData, setFormData] = React.useState({
     name: '',
     email: '',
+    phone: '',
+    subject: 'Catering',
     message: '',
     newsletter: false
   });
@@ -15,40 +17,44 @@ export default function ContactSection() {
   const [submitted, setSubmitted] = React.useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!formData.name || !formData.email || !formData.message) return;
+    if (!formData.name || !formData.email || !formData.message) return;
 
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    await emailjs.send(
-      "YOUR_SERVICE_ID",
-      "YOUR_TEMPLATE_ID",
-      {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-      },
-      "YOUR_PUBLIC_KEY"
-    );
+    try {
+      await emailjs.send(
+        "YOUR_SERVICE_ID",
+        "YOUR_TEMPLATE_ID",
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        "YOUR_PUBLIC_KEY"
+      );
 
-    setSubmitted(true);
+      setSubmitted(true);
 
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-      newsletter: false,
-    });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "Catering",
+        message: "",
+        newsletter: false,
+      });
 
-  } catch (error) {
-    alert("Failed to send message.");
-    console.error(error);
-  }
+    } catch (error) {
+      alert("Failed to send message.");
+      console.error(error);
+    }
 
-  setIsSubmitting(false);
-};
+    setIsSubmitting(false);
+  };
 
   // Quick WhatsApp text generator
   const triggerWhatsApp = () => {
@@ -86,7 +92,6 @@ export default function ContactSection() {
                 <div className="space-y-1 text-sm">
                   <p className="font-extrabold text-stone-950 dark:text-white">Our Central Kitchen</p>
                   <p className="text-stone-500 dark:text-neutral-400">42 Country Home,Sisa Memorial Mall,Close to Falanu Junction,Benin City,Edo State.</p>
-                  <p className="text-[11px] text-red-500 font-bold font-mono"></p>
                 </div>
               </div>
 
@@ -101,7 +106,7 @@ export default function ContactSection() {
                     Order Assistance: <span className="font-mono font-bold text-neutral-800 dark:text-white">+234 906 912 5598</span>
                   </p>
                   <p className="text-stone-500 dark:text-neutral-400">
-                    Email: <span className="font-mono text-neutral-800 dark:text-white">@yelobistro@gmail.com</span>
+                    Email: <span className="font-mono text-neutral-800 dark:text-white">support@yelobistro@gmail.com</span>
                   </p>
                 </div>
               </div>
@@ -115,7 +120,7 @@ export default function ContactSection() {
                   <p className="font-extrabold text-stone-950 dark:text-white">Operation & Delivery Hours</p>
                   <p className="text-stone-600 dark:text-neutral-300">Mon - Sat: <span className="font-semibold text-neutral-800 dark:text-white">8:00 AM - 10:00 PM</span></p>
                   <p className="text-stone-600 dark:text-neutral-300"> Sun: <span className="font-semibold text-neutral-800 dark:text-white">12:00 PM - 10:00 PM</span></p>
-                  <p className="text-[11px] text-red-500 font-bold font-mono uppercase tracking-wide">● Please be kindly informed  online orders stops at 9:30 PM</p>
+                  <p className="text-[11px] text-red-500 font-bold font-mono uppercase tracking-wide">● Please be kindly informed online orders stops at 9:30 PM</p>
                 </div>
               </div>
 
@@ -131,11 +136,10 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-extrabold text-lg">Instant WhatsApp Order</h4>
-                  <p className="text-small text-white/80">Skip the lines, lets have a chat </p>
+                  <p className="text-small text-white/80">Skip the lines, lets have a chat</p>
                 </div>
               </div>
               
-
               <button
                 id="whatsapp-chat-button"
                 onClick={triggerWhatsApp}
@@ -148,19 +152,18 @@ export default function ContactSection() {
 
           </div>
 
-          {/* Right Column: Contact form & Delivery zone radius map simulation */}
+          {/* Right Column: Contact form */}
           <div className="lg:col-span-7 space-y-8">
             
-            {/* Feedback / Inquiry Form */}
             <div className="bg-stone-50 dark:bg-neutral-900/40 border border-stone-200/60 dark:border-neutral-800 rounded-3xl p-6 sm:p-8 space-y-6">
               
               <div>
                 <h3 className="font-black text-lg text-stone-900 dark:text-white">Drop Us a message</h3>
-                <p className="text-xs text-stone-400 dark:text-neutral-500"></p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4" id="bistro-inquiry-form">
                 
+                {/* Full Name & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono">Full Name</label>
@@ -186,29 +189,49 @@ export default function ContactSection() {
                   </div>
                 </div>
 
+                {/* Phone Number & Select Subject */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono">Phone Number</label>
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+234 800 000 0000"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-neutral-950 border border-stone-200/80 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono">Select Subject</label>
+                    <div className="relative">
+                      <select
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-white dark:bg-neutral-950 border border-stone-200/80 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium appearance-none cursor-pointer pr-10"
+                      >
+                      
+                        <option value="Career">Career</option>
+                        <option value="Customer Experience">Customer Experience</option>
+                        <option value="General Enquiry">General Enquiry</option>
+                        <option value="Message">Message</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-stone-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Your Message */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono">Message Comments</label>
+                  <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono">Your Message</label>
                   <textarea
                     required
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="We'd love to hear feedback! Tell us about your delivery experience, request recipes, or query catering options..."
+                    placeholder="Type your message..."
                     className="w-full px-4 py-3 rounded-xl bg-white dark:bg-neutral-950 border border-stone-200/80 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 font-medium whitespace-pre-wrap"
                   />
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="news-check"
-                    checked={formData.newsletter}
-                    onChange={(e) => setFormData({ ...formData, newsletter: e.target.checked })}
-                    className="w-4 h-4 text-yellow-500 bg-white dark:bg-neutral-950 rounded border-stone-300 focus:ring-yellow-400"
-                  />
-                  {/*< label htmlFor="news-check" className="text-xs text-stone-600 dark:text-neutral-400 cursor-pointer select-none">
-                    Subscribe to Yelo News to receive a <strong className="text-red-500">15% discount voucher</strong> automatically!
-                  </label>*/}
                 </div>
 
                 <button
@@ -243,56 +266,13 @@ export default function ContactSection() {
                   >
                     <Heart className="w-5 h-5 text-emerald-500 shrink-0 fill-emerald-500 animate-pulse" />
                     <p className="text-xs text-emerald-800 dark:text-emerald-400 leading-relaxed font-sans">
-                      Thank you! Your message has been routed to our  team. Check your Inbox for Response. 
+                      Thank you! Your message has been routed to our team. Check your Inbox for Response. 
                     </p>
                   </motion.div>
                 )}
               </AnimatePresence>
 
             </div>
-
-            {/* Illustrated Map section with Delivery Zones 
-            <div className="p-6 bg-stone-50 dark:bg-neutral-900/40 border border-stone-200/50 dark:border-neutral-800 rounded-3xl space-y-4" id="delivery-map-container">
-              <div>
-                <h4 className="font-extrabold text-sm text-stone-900 dark:text-white uppercase tracking-wider font-mono">Our Active  Zone Map</h4>
-                <p className="text-xs text-stone-500 dark:text-neutral-400"></p>
-              </div>
-
-              * Vector Grid Map Mock *
-              <div className="relative border border-stone-200/60 dark:border-neutral-800/80 rounded-2xl aspect-[16/9] overflow-hidden bg-stone-100 dark:bg-neutral-950 flex flex-col items-center justify-center p-4 text-center">
-                
-                * Simulated Grid Lines 
-                <div className="absolute inset-0 bg-linear-to-b from-stone-200/30 dark:from-neutral-900/20 to-transparent bg-[size:20px_20px] pointer-events-none" />
-                
-                {/* Radial rings 
-                <div className="absolute w-44 h-44 rounded-full border border-dashed border-yellow-400/35 dark:border-yellow-400/20 animate-pulse" />
-                <div className="absolute w-72 h-72 rounded-full border border-dashed border-red-400/25 dark:border-red-400/10" style={{ animationDuration: '8s' }} />
-
-                * Legend details 
-                <div className="absolute bottom-3 left-3 bg-white/95 dark:bg-neutral-950/95 p-3 rounded-xl border border-stone-200/60 dark:border-neutral-800 shadow-sm text-left max-w-[140px] space-y-1 pointer-events-none z-10">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 bg-yellow-400 rounded-full"></span>
-                    <span className="text-[10px] text-stone-600 dark:text-neutral-400 font-bold font-mono">Zone A: 1-4 mi</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 bg-red-400 rounded-full"></span>
-                    <span className="text-[10px] text-stone-600 dark:text-neutral-400 font-bold font-mono">Zone B: 4-8 mi</span>
-                  </div>
-                  <p className="text-[8px] text-stone-400 select-none">Outside? Contact us! </p>
-                </div>
-
-                {/* Map center Pin representing Yelo Bistro 
-                <div className="relative z-10 flex flex-col items-center gap-1.5">
-                  <div className="relative flex items-center justify-center w-12 h-12 bg-yellow-400 text-neutral-950 rounded-2xl shadow-xl animate-bounce">
-                    <Clock className="w-6 h-6 text-red-600" />
-                  </div>
-                  <div>
-                    <h5 className="font-extrabold text-xs text-stone-900 dark:text-white">Yelo Central Kitchen</h5>
-                    <p className="text-[9px] text-stone-500 dark:text-neutral-400">42 country home road</p>
-                  </div>
-                </div>*
-              </div>
-            </div>*/}
 
           </div>
 

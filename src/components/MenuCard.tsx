@@ -74,9 +74,7 @@ export default function MenuCard({
             </div>
           </div>
 
-          <p className="mt-2 text-xs lg:text-sm leading-relaxed text-gray-600 dark:text-gray-400 line-clamp-2">
-            {item.description}
-          </p>
+      
         </div>
 
         {/* Bottom Actions */}
@@ -120,7 +118,7 @@ px-5
 py-3
 min-w-[140px]
 rounded-full
-bg-yellow-400
+bg-yellow-300
 hover:bg-yellow-500
 font-bold
 flex

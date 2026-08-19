@@ -4,7 +4,7 @@ import { CartItem } from '../types';
 import Logo from './Logo';
 
 interface NavbarProps {
-  activeTab: 'home' | '' | 'about' | 'contact' | 'track';
+  activeTab: 'home' | 'menu' | 'about' | 'contact' | 'track';
   setActiveTab: (tab: 'home' | 'menu' | 'about' | 'contact' | 'track') => void;
   cart: CartItem[];
   setIsCartOpen: (open: boolean) => void;
@@ -23,11 +23,9 @@ export default function Navbar({
   activeOrder
 }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  // 1. Fixed error: Declared missing isScrolled state
   const [isScrolled, setIsScrolled] = React.useState(false); 
   const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  // 2. Fixed error: Added window scroll listener to track scroll position
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -41,9 +39,9 @@ export default function Navbar({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Home link removed, first tab is now "Menu" pointing to 'home' tab content
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'menu', label: 'Menu' },
+    { id: 'home', label: 'Menu' },
     { id: 'about', label: 'About Us' },
     { id: 'contact', label: 'Contact' },
   ] as const;
@@ -82,7 +80,7 @@ export default function Navbar({
                 key={item.id}
                 id={`nav-${item.id}`}
                 onClick={() => setActiveTab(item.id)}
-                className={`relative py-2 font-medium text-sm transition-all duration-200 outline-none cursor-pointer ${
+                className={`relative py-2 font-medium text-base transition-all duration-200 outline-none cursor-pointer ${
                   activeTab === item.id 
                     ? 'text-red-500 dark:text-yellow-400 font-bold' 
                     : isScrolled

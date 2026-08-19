@@ -31,6 +31,11 @@ export default function ProductOptionsModal({
   const [quantity, setQuantity] = React.useState(1);
 
   /*
+   * Check if the product has any options available.
+   */
+  const hasOptions = Boolean(item?.options && item.options.length > 0);
+
+  /*
    * Reset the modal whenever a new food item is opened.
    */
   React.useEffect(() => {
@@ -251,11 +256,13 @@ export default function ProductOptionsModal({
                   {/* Header Text */}
                   <div className="flex-1 min-w-0">
                     <h2 className="font-black text-lg sm:text-xl text-stone-900 dark:text-white leading-tight">
-                      Let's Make Your Order
+                      {hasOptions ? "Let's Make Your Order" : item.name}
                     </h2>
 
-                    <p className="text-xs sm:text-sm text-stone-500 dark:text-neutral-400 mt-1">
-                      Customize your {item.name} just the way you like it.
+                    <p className="text-xs sm:text-sm text-stone-500 dark:text-neutral-400 mt-1 truncate">
+                      {hasOptions
+                        ? `Customize your ${item.name} just the way you like it.`
+                        : item.description || 'Select quantity and add to your order.'}
                     </p>
                   </div>
 
@@ -264,7 +271,7 @@ export default function ProductOptionsModal({
                     type="button"
                     onClick={onClose}
                     className="p-2 rounded-xl hover:bg-stone-100 dark:hover:bg-neutral-900 text-stone-500 hover:text-stone-900 dark:hover:text-white transition-colors cursor-pointer flex-shrink-0"
-                    aria-label="Close customization"
+                    aria-label="Close modal"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -276,31 +283,31 @@ export default function ProductOptionsModal({
               {/* =========================
                   OPTIONS CONTENT
               ========================== */}
-              <div className="flex-1 overflow-y-auto p-10 space-y-6">
+              <div className={`flex-1 overflow-y-auto ${hasOptions ? 'p-6 sm:p-10 space-y-6' : 'p-6 space-y-4'}`}>
 
-                {/* Food Name + Base Price */}
-                <div className="flex items-center justify-between gap-4">
+                {/* Food Name + Base Price (Shown inside body only when options exist to avoid redundancy) */}
+                {hasOptions && (
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-black text-base text-stone-900 dark:text-white">
+                        {item.name}
+                      </h3>
 
-                  <div>
-                    <h3 className="font-black text-base text-stone-900 dark:text-white">
-                      {item.name}
-                    </h3>
+                      {item.description && (
+                        <p className="text-xs text-stone-500 dark:text-neutral-400 mt-1">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
 
-                    {item.description && (
-                      <p className="text-xs text-stone-500 dark:text-neutral-400 mt-1">
-                        {item.description}
-                      </p>
-                    )}
+                    <div className="font-black text-sm text-stone-900 dark:text-white whitespace-nowrap">
+                      ₦{item.price.toLocaleString()}
+                    </div>
                   </div>
-
-                  <div className="font-black text-sm text-stone-900 dark:text-white whitespace-nowrap">
-                    ₦{item.price.toLocaleString()}
-                  </div>
-
-                </div>
+                )}
 
                 {/* Dynamic Option Groups */}
-                {item.options && item.options.length > 0 ? (
+                {hasOptions && item.options ? (
                   <div className="space-y-6">
 
                     {item.options.map((group) => (
@@ -324,10 +331,7 @@ export default function ProductOptionsModal({
 
                         </div>
 
-                        {/* =========================
-                            RADIO OPTIONS
-                            Displayed horizontally
-                        ========================== */}
+                        {/* RADIO OPTIONS */}
                         {group.type === 'radio' ? (
                           <div className="flex items-center gap-5 flex-wrap">
 
@@ -373,10 +377,7 @@ export default function ProductOptionsModal({
 
                           </div>
                         ) : (
-                          /* =========================
-                             CHECKBOX OPTIONS
-                             Keep boxed design
-                          ========================== */
+                          /* CHECKBOX OPTIONS */
                           <div className="space-y-2">
 
                             {group.choices.map((choice) => {
@@ -435,21 +436,22 @@ export default function ProductOptionsModal({
 
                   </div>
                 ) : (
-                  /* No Options */
-                  <div className="py-8 text-center">
-
-                    <div className="w-14 h-14 mx-auto rounded-full bg-yellow-100 dark:bg-yellow-400/10 flex items-center justify-center">
-                      <ShoppingBag className="w-6 h-6 text-yellow-500" />
+                  /* Simple Non-Customizable Item View */
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-sm font-bold text-stone-500 dark:text-neutral-400">
+                        Unit Price
+                      </span>
+                      <span className="font-black text-base text-stone-900 dark:text-white">
+                        ₦{item.price.toLocaleString()}
+                      </span>
                     </div>
 
-                    <h3 className="mt-3 font-black text-sm text-stone-900 dark:text-white">
-                      No customization needed
-                    </h3>
-
-                    <p className="mt-1 text-xs text-stone-500 dark:text-neutral-400">
-                      This item is ready to be added to your basket.
-                    </p>
-
+                    {item.description && (
+                      <p className="text-sm text-stone-600 dark:text-neutral-300 leading-relaxed bg-stone-50 dark:bg-neutral-900/50 p-4 rounded-2xl border border-stone-100 dark:border-neutral-800">
+                        {item.description}
+                      </p>
+                    )}
                   </div>
                 )}
 
