@@ -1,22 +1,23 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface HeroProps {
   onOrderNow: () => void;
   onViewMenu: () => void;
 }
 
-// Banner slide image sources
+// Hero banner images
 const SLIDES = [
-  "/hero/hero no1.png", // combo banner
-  "/hero/hero no 2.png", // milkshake banner
-  "/hero/hero no 3.png", // wings banner
+  "/hero/hero no1.png",
+  "/hero/hero no 2.png",
+  "/hero/hero no 3.png",
 ];
 
 export default function Hero({ onOrderNow, onViewMenu }: HeroProps) {
   const [current, setCurrent] = React.useState(0);
 
-  // Auto-play slides every 5 seconds
+  // Automatically change slides every 5 seconds
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % SLIDES.length);
@@ -26,44 +27,154 @@ export default function Hero({ onOrderNow, onViewMenu }: HeroProps) {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-white rounded-b-[60px]">
-      
-      {/* 1. Dynamic Auto-Sizing Image Container */}
-      <AnimatePresence initial={false}>
-        <motion.img
-          key={current}
-          src={SLIDES[current]}
-          alt={`Banner slide ${current + 1}`}
-          className="w-full h-full block object-cover [&:not(:first-child)]:absolute [&:not(:first-child)]:top-0 [&:not(:first-child)]:left-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            duration: 0.8,
-            ease: "easeInOut",
-          }}
-        />
-      </AnimatePresence>
+    <section
+      className="
+        relative
+        w-full
+        overflow-hidden
+        bg-white
+        rounded-b-[32px]
+        sm:rounded-b-[40px]
+        md:rounded-b-[50px]
+        lg:rounded-b-[60px]
+      "
+    >
+      {/* 
+        Responsive Hero Container
 
-      {/* 2. Soft Bottom Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none z-10" />
+        Mobile:
+        16 / 9
 
-      {/* 3. Slide Navigation Dots */}
-      <div className="absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-20">
-        {SLIDES.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrent(index)}
-            className={`transition-all duration-300 rounded-full h-1.5 sm:h-2 cursor-pointer ${
-              current === index
-                ? "w-8 sm:w-10 bg-white shadow-lg"
-                : "w-1.5 sm:w-2 bg-white/50 hover:bg-white/80"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
+        Small tablet:
+        approximately 2 / 1
+
+        Desktop:
+        approximately 2.5 / 1
+      */}
+      <div
+        className="
+          relative
+          w-full
+          aspect-[16/9]
+          sm:aspect-[2/1]
+          md:aspect-[2.2/1]
+          lg:aspect-[2.5/1]
+          xl:aspect-[2.7/1]
+        "
+      >
+        <AnimatePresence initial={false} mode="sync">
+          <motion.img
+            key={current}
+            src={SLIDES[current]}
+            alt={`Yelo Bistro banner ${current + 1}`}
+            className="
+              absolute
+              inset-0
+              w-full
+              h-full
+              object-cover
+              object-center
+              select-none
+            "
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.8,
+              ease: "easeInOut",
+            }}
+            draggable={false}
           />
-        ))}
-      </div>
+        </AnimatePresence>
 
+        {/* 
+          Subtle bottom gradient.
+          This keeps the image visible while making
+          the bottom portion slightly darker.
+        */}
+        <div
+          className="
+            absolute
+            inset-0
+            bg-gradient-to-t
+            from-black/35
+            via-transparent
+            to-transparent
+            pointer-events-none
+            z-10
+          "
+        />
+
+        {/* 
+          Slide Navigation
+        */}
+        <div
+          className="
+            absolute
+            bottom-3
+            sm:bottom-4
+            md:bottom-5
+            lg:bottom-6
+            left-1/2
+            -translate-x-1/2
+            flex
+            items-center
+            justify-center
+            gap-2
+            sm:gap-2.5
+            md:gap-3
+            z-20
+          "
+        >
+          {SLIDES.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setCurrent(index)}
+              aria-label={`Go to slide ${index + 1}`}
+              aria-current={current === index ? "true" : "false"}
+              className={`
+                h-1.5
+                sm:h-2
+                rounded-full
+                cursor-pointer
+                transition-all
+                duration-300
+                ease-in-out
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-white
+                focus-visible:ring-offset-2
+                focus-visible:ring-offset-transparent
+
+                ${
+                  current === index
+                    ? `
+                      w-7
+                      sm:w-8
+                      md:w-10
+                      bg-white
+                      shadow-lg
+                    `
+                    : `
+                      w-1.5
+                      sm:w-2
+                      bg-white/50
+                      hover:bg-white/80
+                    `
+                }
+              `}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
+
