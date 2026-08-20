@@ -156,28 +156,28 @@ export default function MenuSection({
               </div>*/}
 
             </div>
+            {/* Static Container with Compact Height & Horizontal Scroll */}
+<div className="w-full bg-yellow-300 dark:bg-red-700 rounded-xl sm:rounded-2xl p-1 shadow-md mx-auto">
+  <div className="flex items-center justify-start sm:justify-center gap-8 sm:gap-9 overflow-x-auto no-scrollbar scroll-smooth px-1">
+    {categories.map((cat) => {
+      const isActive = selectedCategory === cat;
+      return (
+        <button
+          key={cat}
+          onClick={() => setSelectedCategory(cat)}
+          className={`shrink-0 whitespace-nowrap px-3 py-1 rounded-lg text-[10px] sm:text-xs font-extrabold uppercase tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer ${
+            isActive
+              ? 'bg-white text-red-600 shadow-sm'
+              : 'bg-transparent text-white hover:bg-white/10'
+          }`}
+        >
+          {cat}
+        </button>
+      );
+    })}
+  </div>
+</div>
 
-            {/* Static Red Block Container with Custom Shrunk Buttons */}
-            <div className="w-full bg-yellow-300 dark:bg-red-700 rounded-xl sm:rounded-2xl md:rounded-3xl p-0.9 sm:p-1 md:p-1 shadow-lg mx-auto">
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-                {categories.map((cat) => {
-                  const isActive = selectedCategory === cat;
-                  return (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`flex-1 min-w-[80px] sm:min-w-[100px] max-w-[120px] sm:max-w-[140px] md:max-w-[160px] text-center whitespace-nowrap px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold uppercase tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer ${
-                        isActive
-                          ? 'bg-white text-red-600 shadow-md border border-white'
-                          : 'bg-transparent text-white border border-transparent/1 hover:bg-red/10'
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
 
           </div>
         )}

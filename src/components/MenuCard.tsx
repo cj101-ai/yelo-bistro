@@ -78,9 +78,9 @@ export default function MenuCard({
         </div>
 
         {/* Bottom Actions */}
-<div className="mt-auto flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-800">
-  <div>
-    <span className="text-[15px] uppercase tracking-widest text-stone-400 block">
+<div className="mt-auto flex items-center justify-between gap-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+  <div className="flex-shrink-0">
+    <span className="text-[10px] lg:text-[12px] uppercase tracking-widest text-stone-400 block">
       Price
     </span>
     <span className="text-sm lg:text-xl font-black font-mono text-amber-500 dark:text-white">
@@ -90,19 +90,19 @@ export default function MenuCard({
 
   <div>
     {qty > 0 ? (
-      <div className="flex items-center gap-1 bg-yellow-400 dark:bg-yellow-500 text-black px-1.5 py-0.5 rounded-xl">
+      <div className="flex items-center gap-1 bg-yellow-400 dark:bg-yellow-500 text-black px-2 py-1.5 rounded-full">
         <button
           onClick={() => onRemoveFromCart(item)}
-          className="p-0.5 hover:bg-yellow-300 rounded-md transition"
+          className="p-1 hover:bg-yellow-300 rounded-full transition"
         >
           <Minus className="w-3 h-3" />
         </button>
-        <span className="font-bold text-[11px] min-w-[12px] text-center">
+        <span className="font-bold text-xs min-w-[16px] text-center">
           {qty}
         </span>
         <button
           onClick={() => onAddToCart(item)}
-          className="p-0.5 hover:bg-yellow-300 rounded-md transition"
+          className="p-1 hover:bg-yellow-300 rounded-full transition"
         >
           <Plus className="w-3 h-3" />
         </button>
@@ -114,18 +114,21 @@ export default function MenuCard({
           toast.success(`${item.name} added to cart`);
         }}
         className="
-          px-3
-          py-4
+          px-3.5
+          py-2
           text-xs
-          rounded-full
-          bg-yellow-300
+          lg:text-sm
+          whitespace-nowrap
+          rounded-xl
+          bg-yellow-400
           hover:bg-yellow-500
+          text-black
           font-bold
           flex
           items-center
           justify-center
-          gap-1
           transition-all
+          active:scale-95
         "
       >
         <span>Add to Cart</span>
