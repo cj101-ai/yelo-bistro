@@ -157,7 +157,6 @@ export default function AboutSection() {
             <div className="h-[2px] bg-yellow-500 dark:bg-yellow-400 flex-1"></div>
             <div className="flex items-center gap-2 px-2">
               <Instagram className="w-6 h-6 text-yellow-500 dark:text-yellow-400" />
-              <Video className="w-6 h-6 text-yellow-500 dark:text-yellow-400" />
               <h3 className="text-xl sm:text-3xl font-black text-yellow-500 dark:text-yellow-400 uppercase tracking-tight">
                 FOLLOW US ON OUR SOCIALS
               </h3>
