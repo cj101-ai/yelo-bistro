@@ -78,62 +78,61 @@ export default function MenuCard({
         </div>
 
         {/* Bottom Actions */}
-        <div className="mt-auto flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-neutral-800">
-          <div>
-            <span className="text-[9px] uppercase tracking-widest text-stone-400 block">
-              Price
-            </span>
-            <span className="text-base lg:text-xl font-black font-mono text-amber-500 dark:text-white">
-              ₦{item.price.toLocaleString()}
-            </span>
-          </div>
+<div className="mt-auto flex items-center justify-between pt-1 border-t border-neutral-100 dark:border-neutral-800">
+  <div>
+    <span className="text-[15px] uppercase tracking-widest text-stone-400 block">
+      Price
+    </span>
+    <span className="text-sm lg:text-xl font-black font-mono text-amber-500 dark:text-white">
+      ₦{item.price.toLocaleString()}
+    </span>
+  </div>
 
-          <div>
-            {qty > 0 ? (
-              <div className="flex items-center gap-2 bg-yellow-400 dark:bg-yellow-500 text-black px-2 py-1 rounded-2xl">
-                <button
-                  onClick={() => onRemoveFromCart(item)}
-                  className="p-1 hover:bg-yellow-300 rounded-lg transition"
-                >
-                  <Minus className="w-3.5 h-3.5" />
-                </button>
-                <span className="font-bold text-xs min-w-[14px] text-center">
-                  {qty}
-                </span>
-                <button
-                  onClick={() => onAddToCart(item)}
-                  className="p-1 hover:bg-yellow-300 rounded-lg transition"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => {
-                  onAddToCart(item);
-                  toast.success(`${item.name} added to cart`);
-                }}
-                className="
-px-1
-py-1
-min-w-[140px]
-rounded-full
-bg-yellow-300
-hover:bg-yellow-500
-font-bold
-flex
-items-center
-justify-center
-gap-2
-transition-all
-"
-              >
-                
-                <span>Add to Cart</span>
-              </button>
-            )}
-          </div>
-        </div>
+  <div>
+    {qty > 0 ? (
+      <div className="flex items-center gap-1 bg-yellow-400 dark:bg-yellow-500 text-black px-1.5 py-0.5 rounded-xl">
+        <button
+          onClick={() => onRemoveFromCart(item)}
+          className="p-0.5 hover:bg-yellow-300 rounded-md transition"
+        >
+          <Minus className="w-3 h-3" />
+        </button>
+        <span className="font-bold text-[11px] min-w-[12px] text-center">
+          {qty}
+        </span>
+        <button
+          onClick={() => onAddToCart(item)}
+          className="p-0.5 hover:bg-yellow-300 rounded-md transition"
+        >
+          <Plus className="w-3 h-3" />
+        </button>
+      </div>
+    ) : (
+      <button
+        onClick={() => {
+          onAddToCart(item);
+          toast.success(`${item.name} added to cart`);
+        }}
+        className="
+          px-3
+          py-4
+          text-xs
+          rounded-full
+          bg-yellow-300
+          hover:bg-yellow-500
+          font-bold
+          flex
+          items-center
+          justify-center
+          gap-1
+          transition-all
+        "
+      >
+        <span>Add to Cart</span>
+      </button>
+    )}
+  </div>
+</div>
       </div>
     </motion.div>
   );

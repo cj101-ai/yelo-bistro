@@ -462,7 +462,7 @@ export default function CartSidebar({
                   id="checkout-trigger-btn"
                   type="button"
                   onClick={handleCheckoutSubmit}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white font-black text-sm tracking-wide transition-all shadow-lg shadow-red-500/10 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-4 rounded-2xl bg-yellow-300 hover:from-red-600 hover:to-yellow-600 text-white font-black text-sm tracking-wide transition-all shadow-lg shadow-red-500/10 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Place Order</span>
 

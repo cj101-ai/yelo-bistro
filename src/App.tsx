@@ -208,7 +208,7 @@ const addItemToCart = (
   );
 
   // Build the WhatsApp message
-  let message = `🍽️ *NEW YELO BISTRO ORDER*\n\n`;
+  let message = `🍽️ *NEW YELO BISTRO WEBSITE ORDER*\n\n`;
 
   message += `🆔 Order ID: ${order.id}\n\n`;
 
