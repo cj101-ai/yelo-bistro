@@ -114,8 +114,8 @@ export default function MenuCard({
                   toast.success(`${item.name} added to cart`);
                 }}
                 className="
-px-5
-py-3
+px-1
+py-1
 min-w-[140px]
 rounded-full
 bg-yellow-300

@@ -11,7 +11,8 @@ import {
   User,
   Notebook,
   CreditCard,
-  ChevronRight
+  ChevronRight,
+  Truck
 } from 'lucide-react';
 import { CartItem, OrderDetails } from '../types';
 
@@ -42,15 +43,9 @@ export default function CartSidebar({
 
   /*
    * Calculate the subtotal using the customized unit price.
-   *
-   * Example:
-   * Burger = ₦5,000
-   * Extra Cheese = ₦500
-   * unitPrice = ₦5,500
    */
   const subtotal = cart.reduce(
-    (sum, cartItem) =>
-      sum + cartItem.unitPrice * cartItem.quantity,
+    (sum, cartItem) => sum + cartItem.unitPrice * cartItem.quantity,
     0
   );
 
@@ -61,9 +56,7 @@ export default function CartSidebar({
 
   const total = subtotal + deliveryFee;
 
-  const handleCheckoutSubmit = (
-    e: React.FormEvent
-  ) => {
+  const handleCheckoutSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (cart.length === 0) {
@@ -71,27 +64,24 @@ export default function CartSidebar({
       return;
     }
 
-    if (
-      !customerName.trim() ||
-      !phone.trim() ||
-      !address.trim()
-    ) {
-      setErrorMsg(
-        'Please complete Name, Mobile, and Delivery Address.'
-      );
+    if (!customerName.trim() || !phone.trim()) {
+      setErrorMsg('Please complete Recipient Name and Active Mobile Phone.');
+      return;
+    }
+
+    if (paymentMethod === 'Delivery' && !address.trim()) {
+      setErrorMsg('Please enter a valid delivery address.');
       return;
     }
 
     setErrorMsg('');
 
     const newOrder: OrderDetails = {
-      id: `YLO-${Math.floor(
-        100000 + Math.random() * 900000
-      )}`,
+      id: `YLO-${Math.floor(100000 + Math.random() * 900000)}`,
 
       customerName: customerName.trim(),
       phone: phone.trim(),
-      address: address.trim(),
+      address: paymentMethod === 'Delivery' ? address.trim() : 'Pick-up at YELO BISTRO',
 
       items: [...cart],
 
@@ -111,7 +101,6 @@ export default function CartSidebar({
     };
 
     onPlaceOrder(newOrder);
-
     onClose();
   };
 
@@ -153,8 +142,7 @@ export default function CartSidebar({
 
                 <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-neutral-800 dark:text-yellow-400 font-bold px-2 py-0.5 rounded-full font-mono">
                   {cart.reduce(
-                    (total, cartItem) =>
-                      total + cartItem.quantity,
+                    (total, cartItem) => total + cartItem.quantity,
                     0
                   )}{' '}
                   items
@@ -175,10 +163,7 @@ export default function CartSidebar({
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
               {cart.length > 0 ? (
-                <div
-                  className="space-y-4"
-                  id="cart-items-wrapper"
-                >
+                <div className="space-y-4" id="cart-items-wrapper">
                   {/* Cart Items */}
                   {cart.map((cartItem) => {
                     const {
@@ -209,27 +194,22 @@ export default function CartSidebar({
                             </h4>
 
                             <p className="text-[11px] text-stone-500 dark:text-neutral-400 font-sans">
-                              ₦{unitPrice.toLocaleString()} ×{' '}
-                              {quantity}
+                              ₦{unitPrice.toLocaleString()} × {quantity}
                             </p>
 
                             {/* Selected Custom Options */}
                             {selectedOptions.length > 0 && (
                               <div className="mt-1 space-y-0.5">
-                                {selectedOptions.map(
-                                  (option) => (
-                                    <p
-                                      key={`${option.groupId}-${option.choiceId}`}
-                                      className="text-[10px] text-stone-400 dark:text-neutral-500"
-                                    >
-                                      {option.groupName}:{' '}
-                                      {option.choiceName}
-
-                                      {option.price > 0 &&
-                                        ` (+₦${option.price.toLocaleString()})`}
-                                    </p>
-                                  )
-                                )}
+                                {selectedOptions.map((option) => (
+                                  <p
+                                    key={`${option.groupId}-${option.choiceId}`}
+                                    className="text-[10px] text-stone-400 dark:text-neutral-500"
+                                  >
+                                    {option.groupName}: {option.choiceName}
+                                    {option.price > 0 &&
+                                      ` (+₦${option.price.toLocaleString()})`}
+                                  </p>
+                                ))}
                               </div>
                             )}
                           </div>
@@ -241,10 +221,7 @@ export default function CartSidebar({
                             <button
                               type="button"
                               onClick={() =>
-                                onUpdateQuantity(
-                                  cartItemId,
-                                  quantity - 1
-                                )
+                                onUpdateQuantity(cartItemId, quantity - 1)
                               }
                               className="p-1 text-stone-500 hover:text-stone-950 dark:hover:text-white cursor-pointer"
                               aria-label="Decrease quantity"
@@ -259,10 +236,7 @@ export default function CartSidebar({
                             <button
                               type="button"
                               onClick={() =>
-                                onUpdateQuantity(
-                                  cartItemId,
-                                  quantity + 1
-                                )
+                                onUpdateQuantity(cartItemId, quantity + 1)
                               }
                               className="p-1 text-stone-500 hover:text-stone-950 dark:hover:text-white cursor-pointer"
                               aria-label="Increase quantity"
@@ -273,9 +247,7 @@ export default function CartSidebar({
 
                           <button
                             type="button"
-                            onClick={() =>
-                              onRemoveItem(cartItemId)
-                            }
+                            onClick={() => onRemoveItem(cartItemId)}
                             className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors cursor-pointer"
                             title="Remove item"
                             aria-label="Remove item"
@@ -290,18 +262,16 @@ export default function CartSidebar({
                   {/* Delivery Notice */}
                   <div className="p-3 bg-yellow-50 dark:bg-neutral-900 text-stone-800 dark:text-yellow-400 rounded-2xl border border-yellow-200/50 dark:border-yellow-400/10 text-xs text-center font-semibold font-sans">
                     <span className="text-stone-600 dark:text-neutral-300">
-                      Please recheck your order before
-                      proceeding. Delivery fee will be
-                      communicated after you proceed.
+                      Please recheck your order before proceeding.{' '}
+                      {paymentMethod === 'Delivery'
+                        ? 'Delivery fee will be communicated after you proceed.'
+                        : 'Pick-up order from Yelo Bistro.'}
                     </span>
                   </div>
                 </div>
               ) : (
                 /* Empty Cart */
-                <div
-                  className="text-center py-12 space-y-4"
-                  id="empty-cart-view"
-                >
+                <div className="text-center py-12 space-y-4" id="empty-cart-view">
                   <div className="w-16 h-16 bg-stone-100 dark:bg-neutral-900 rounded-full flex items-center justify-center mx-auto text-stone-400">
                     <ShoppingBag className="w-8 h-8" />
                   </div>
@@ -312,8 +282,8 @@ export default function CartSidebar({
                     </h3>
 
                     <p className="text-xs text-stone-500 dark:text-neutral-400 max-w-[240px] mx-auto">
-                      Explore our delicious shawarma,
-                      smash burgers, and shakes to begin!
+                      Explore our delicious shawarma, smash burgers, and shakes
+                      to begin!
                     </p>
                   </div>
 
@@ -327,17 +297,52 @@ export default function CartSidebar({
                 </div>
               )}
 
-              {/* Delivery Details */}
+              {/* Delivery / Pickup Details */}
               {cart.length > 0 && (
                 <div
                   className="pt-6 border-t border-stone-200/60 dark:border-neutral-900 space-y-4"
                   id="checkout-form-section"
                 >
                   <h3 className="font-black text-sm text-stone-900 dark:text-white uppercase tracking-wider font-mono">
-                    Delivery Logistics
+                    Order Logistics
                   </h3>
 
                   <div className="space-y-3.5">
+                    {/* Order Method Selector at Top */}
+                    <div className="space-y-1">
+                      <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
+                        How would you like to receive your order?
+                      </label>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setPaymentMethod('Delivery')}
+                          className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
+                            paymentMethod === 'Delivery'
+                              ? 'bg-neutral-900 text-white dark:bg-yellow-400 dark:text-neutral-900 border-neutral-950 dark:border-yellow-400'
+                              : 'bg-stone-50 text-stone-600 dark:bg-neutral-900 dark:text-neutral-300 border-stone-200/60 dark:border-neutral-800'
+                          }`}
+                        >
+                          <Truck className="w-3.5 h-3.5" />
+                          Delivery
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setPaymentMethod('Pick-up')}
+                          className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
+                            paymentMethod === 'Pick-up'
+                              ? 'bg-neutral-900 text-white dark:bg-yellow-400 dark:text-neutral-900 border-neutral-950 dark:border-yellow-400'
+                              : 'bg-stone-50 text-stone-600 dark:bg-neutral-900 dark:text-neutral-300 border-stone-200/60 dark:border-neutral-800'
+                          }`}
+                        >
+                          <CreditCard className="w-3.5 h-3.5" />
+                          Pick-up
+                        </button>
+                      </div>
+                    </div>
+
                     {/* Name */}
                     <div className="space-y-1">
                       <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
@@ -349,9 +354,7 @@ export default function CartSidebar({
                         type="text"
                         placeholder="e.g. Jack Anderson"
                         value={customerName}
-                        onChange={(e) =>
-                          setCustomerName(e.target.value)
-                        }
+                        onChange={(e) => setCustomerName(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400 font-medium font-sans"
                       />
                     </div>
@@ -367,30 +370,28 @@ export default function CartSidebar({
                         type="tel"
                         placeholder="e.g. +234 801 234 5678"
                         value={phone}
-                        onChange={(e) =>
-                          setPhone(e.target.value)
-                        }
+                        onChange={(e) => setPhone(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400 font-semibold font-mono"
                       />
                     </div>
 
-                    {/* Address */}
-                    <div className="space-y-1">
-                      <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-red-500" />
-                        Shipping / Delivery Address
-                      </label>
+                    {/* Address (Only for Delivery) */}
+                    {paymentMethod === 'Delivery' && (
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-red-500" />
+                          Shipping / Delivery Address
+                        </label>
 
-                      <input
-                        type="text"
-                        placeholder="Enter your delivery address"
-                        value={address}
-                        onChange={(e) =>
-                          setAddress(e.target.value)
-                        }
-                        className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400 font-medium font-sans"
-                      />
-                    </div>
+                        <input
+                          type="text"
+                          placeholder="Enter your delivery address"
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                          className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400 font-medium font-sans"
+                        />
+                      </div>
+                    )}
 
                     {/* Notes */}
                     <div className="space-y-1">
@@ -403,49 +404,9 @@ export default function CartSidebar({
                         type="text"
                         placeholder="e.g. Please make the pasta very spicy"
                         value={notes}
-                        onChange={(e) =>
-                          setNotes(e.target.value)
-                        }
+                        onChange={(e) => setNotes(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400 font-medium font-sans"
                       />
-                    </div>
-
-                    {/* Order Method */}
-                    <div className="space-y-1">
-                      <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
-                        How would you like to receive your order?
-                      </label>
-
-                      <div className="grid grid-cols-2 gap-3">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setPaymentMethod('Delivery')
-                          }
-                          className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
-                            paymentMethod === 'Delivery'
-                              ? 'bg-neutral-900 text-white dark:bg-yellow-400 dark:text-neutral-900 border-neutral-950 dark:border-yellow-400'
-                              : 'bg-stone-50 text-stone-600 dark:bg-neutral-900 dark:text-neutral-300 border-stone-200/60 dark:border-neutral-800'
-                          }`}
-                        >
-                          Delivery
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setPaymentMethod('Pick-up')
-                          }
-                          className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
-                            paymentMethod === 'Pick-up'
-                              ? 'bg-neutral-900 text-white dark:bg-yellow-400 dark:text-neutral-900 border-neutral-950 dark:border-yellow-400'
-                              : 'bg-stone-50 text-stone-600 dark:bg-neutral-900 dark:text-neutral-300 border-stone-200/60 dark:border-neutral-800'
-                          }`}
-                        >
-                          <CreditCard className="w-3.5 h-3.5" />
-                          Pick-up
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -473,7 +434,9 @@ export default function CartSidebar({
                     <span>Delivery Fee</span>
 
                     <span className="font-mono font-bold text-stone-800 dark:text-white">
-                      To be communicated
+                      {paymentMethod === 'Pick-up'
+                        ? 'Free (Pick-up)'
+                        : 'To be communicated'}
                     </span>
                   </div>
 

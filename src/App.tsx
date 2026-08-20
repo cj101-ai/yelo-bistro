@@ -419,12 +419,12 @@ const addItemToCart = (
                   </div>
                   <div>
                     <h4 className="font-extrabold text-sm text-stone-900 dark:text-white"></h4>
-                    <p className="text-[10px] text-stone-400 font-semibold uppercase">Yelo Bistro Kitchen</p>
+                    <p className="text-[10px] text-stone-400 font-semibold uppercase">Yelo Bistro</p>
                   </div>
                 </div>
 
                 <p className="text-stone-600 dark:text-neutral-300 leading-relaxed font-sans">
-                  "Hey there welcome to yelobistro live chat proceed to place your order or make enquires"
+                  "Hey there welcome to yelobistro Whatsapp platform chat with victoria to place your order or make enquires"
                 </p>
 
                 <button

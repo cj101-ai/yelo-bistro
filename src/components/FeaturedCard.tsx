@@ -68,7 +68,7 @@ export default function FeaturedCard({
 
           {/* Quantity Controls / Add to Cart */}
           {qty > 0 ? (
-            <div className="flex items-center gap-3 border-2 border-red-600 rounded-full px-3 py-1.5 text-red-600">
+            <div className="flex items-center gap-3 border-2 border-red-600 rounded-full px-1 py-1.5 text-red-600">
               <button 
                 onClick={() => onRemoveFromCart(item)}
                 className="hover:scale-110 transition-transform"

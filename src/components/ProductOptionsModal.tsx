@@ -1,6 +1,7 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
+import toast from 'react-hot-toast';
 import {
   FoodItem,
   FoodOptionGroup,
@@ -169,6 +170,8 @@ export default function ProductOptionsModal({
       unitPrice,
       quantity
     );
+
+    toast.success('Your order has been added to cart for checkout');
 
     onClose();
   };
