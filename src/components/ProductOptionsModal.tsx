@@ -262,7 +262,7 @@ export default function ProductOptionsModal({
                       {hasOptions ? "Let's Make Your Order" : item.name}
                     </h2>
 
-                    <p className="text-xs sm:text-sm text-stone-500 dark:text-neutral-400 mt-1 truncate">
+                    <p className="text-xs sm:text-sm line-clamp-2 text-stone-500 dark:text-neutral-400 mt-1 truncate">
                       {hasOptions
                         ? `Customize your ${item.name} just the way you like it.`
                         : item.description || 'Select quantity and add to your order.'}

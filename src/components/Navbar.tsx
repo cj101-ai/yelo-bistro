@@ -66,9 +66,9 @@ export default function Navbar({
             <Logo className="w-13 h-13" animateBounce={true} />
             <div>
               <div className="flex items-center font-extrabold text-2xl tracking-tight">
-                <span className="text-yellow-500 dark:text-yellow-400">Yelo</span>
-                <span className="text-red-600 dark:text-red-500">Bistro</span>
-                <span className={`transition-colors duration-300 ${isScrolled ? 'text-stone-900 dark:text-white' : 'text-white'}`}>.</span>
+                <span className="text-yellow-500 dark:text-yellow-400"></span>
+                <span className="text-red-600 dark:text-red-500"></span>
+                <span className={`transition-colors duration-300 ${isScrolled ? 'text-stone-900 dark:text-white' : 'text-white'}`}></span>
               </div>
             </div>
           </div>

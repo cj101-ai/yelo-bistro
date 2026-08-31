@@ -57,46 +57,44 @@ export default function FeaturedCarousel({
   };
 
   return (
-    <section className="relative w-full max-w-[95vw] sm:max-w-[92vw] lg:max-w-[80vw] mx-auto py-9">
+    <section className="relative w-full max-w-7xl mx-auto py-8 px-4">
       {/* Title */}
-      <div className="flex items-center justify-center gap-2 sm:gap-6 md:gap-8 mb-8 md:mb-14 w-full">
-        <div className="flex-1 min-w-[10px] sm:min-w-[50px] h-[2px] md:h-[3px] bg-yellow-600" />
+      <div className="flex items-center justify-center gap-2 sm:gap-6 md:gap-8 mb-8 w-full">
+        <div className="flex-1 min-w-[10px] sm:min-w-[50px] h-[2px] md:h-[3px] bg-yellow-400" />
 
-        <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold uppercase tracking-wide text-yellow-500 whitespace-nowrap">
+        <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold uppercase tracking-wide text-yellow-400 whitespace-nowrap">
           Customer Favorites
         </h2>
 
-        <div className="flex-1 min-w-[10px] sm:min-w-[50px] h-[2px] md:h-[3px] bg-yellow-600" />
+        <div className="flex-1 min-w-[10px] sm:min-w-[50px] h-[2px] md:h-[3px] bg-yellow-400" />
       </div>
 
-      {/* Carousel */}
+      {/* Carousel Container */}
       <div className="overflow-hidden w-full" ref={emblaRef}>
         <div className="flex -ml-4">
           {featuredItems.map((item) => (
             <div
               key={item.id}
               className="
-                flex-[0_0_66.666%]
-                md:flex-[0_0_40%]
-                lg:flex-[0_0_28.571%]
+                flex-[0_0_66.666%] 
+                md:flex-[0_0_50%] 
+                lg:flex-[0_0_40%] 
                 pl-4
               "
             >
-              <div className="h-full p-1">
-                <FeaturedCard
-                  item={item}
-                  qty={getQty(item.id)}
-                  onAddToCart={onAddToCart}
-                  onRemoveFromCart={onRemoveFromCart}
-                />
-              </div>
+              <FeaturedCard
+                item={item}
+                qty={getQty(item.id)}
+                onAddToCart={onAddToCart}
+                onRemoveFromCart={onRemoveFromCart}
+              />
             </div>
           ))}
         </div>
       </div>
 
       {/* Dots Indicator */}
-      <div className="flex justify-center mt-8 gap-2">
+      <div className="flex justify-center mt-6 gap-2">
         {featuredItems.map((_, index) => (
           <button
             key={index}

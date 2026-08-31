@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -10,15 +9,15 @@ interface HeroProps {
 const SLIDES = [
   {
     desktop: "/hero/hero no1.png",
-    mobile: "/hero/hero no1-mobile.jpg",
+    mobile: "/hero/hero no1-mobile.png",
   },
   {
     desktop: "/hero/hero no 2.png",
-    mobile: "/hero/hero no 2-mobile.jpg",
+    mobile: "/hero/hero no 2-mobile.png",
   },
   {
     desktop: "/hero/hero no 3.png",
-    mobile: "/hero/hero no 3-mobile.jpg",
+    mobile: "/hero/hero no 3-mobile.png",
   },
 ];
 
@@ -52,7 +51,15 @@ export default function Hero({ onOrderNow, onViewMenu }: HeroProps) {
       {/* =========================
           MOBILE HERO
           ========================= */}
-      <div className="relative block md:hidden w-full aspect-[9/16]">
+      <div className="relative block md:hidden w-full">
+        {/* Sizing image sets the container's natural height (invisible, not animated) */}
+        <img
+          src={slide.mobile}
+          alt=""
+          aria-hidden="true"
+          className="block w-full h-auto invisible"
+        />
+
         <AnimatePresence initial={false}>
           <motion.picture
             key={`mobile-${current}`}
@@ -72,11 +79,12 @@ export default function Hero({ onOrderNow, onViewMenu }: HeroProps) {
                 block
                 w-full
                 h-full
-                object-cover
-                object-center
                 select-none
               "
               draggable={false}
+              fetchPriority={current === 0 ? "high" : "auto"}
+              loading={current === 0 ? "eager" : "lazy"}
+              decoding="async"
             />
           </motion.picture>
         </AnimatePresence>
@@ -141,6 +149,9 @@ export default function Hero({ onOrderNow, onViewMenu }: HeroProps) {
                 select-none
               "
               draggable={false}
+              fetchPriority={current === 0 ? "high" : "auto"}
+              loading={current === 0 ? "eager" : "lazy"}
+              decoding="async"
             />
           </motion.picture>
         </AnimatePresence>
@@ -227,5 +238,3 @@ function SlideDots({
     </div>
   );
 }
-
-

@@ -64,14 +64,22 @@ export default function CartSidebar({
       return;
     }
 
-    if (!customerName.trim() || !phone.trim()) {
-      setErrorMsg('Please complete Recipient Name and Active Mobile Phone.');
+    // Customer Name is always required
+    if (!customerName.trim()) {
+      setErrorMsg('Please enter Recipient Name.');
       return;
     }
 
-    if (paymentMethod === 'Delivery' && !address.trim()) {
-      setErrorMsg('Please enter a valid delivery address.');
-      return;
+    // Phone and Address are only required for Delivery
+    if (paymentMethod === 'Delivery') {
+      if (!phone.trim()) {
+        setErrorMsg('Please enter an active mobile phone number.');
+        return;
+      }
+      if (!address.trim()) {
+        setErrorMsg('Please enter a valid delivery address.');
+        return;
+      }
     }
 
     setErrorMsg('');
@@ -347,7 +355,7 @@ export default function CartSidebar({
                     <div className="space-y-1">
                       <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
                         <User className="w-3 h-3 text-red-500" />
-                        Recipient Name
+                        Customer Name
                       </label>
 
                       <input
@@ -363,7 +371,7 @@ export default function CartSidebar({
                     <div className="space-y-1">
                       <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
                         <Phone className="w-3 h-3 text-red-500" />
-                        Active Mobile Phone
+                        Active Mobile Phone {paymentMethod === 'Pick-up' && '(Optional)'}
                       </label>
 
                       <input
@@ -380,7 +388,7 @@ export default function CartSidebar({
                       <div className="space-y-1">
                         <label className="text-[10px] text-stone-500 dark:text-neutral-400 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
                           <MapPin className="w-3 h-3 text-red-500" />
-                          Shipping / Delivery Address
+                          Delivery Address
                         </label>
 
                         <input
@@ -402,7 +410,7 @@ export default function CartSidebar({
 
                       <input
                         type="text"
-                        placeholder="e.g. Please make the pasta very spicy"
+                        placeholder=""
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         className="w-full px-4 py-2.5 rounded-xl bg-stone-50 dark:bg-neutral-900 border border-stone-200/60 dark:border-neutral-800 text-stone-800 dark:text-neutral-100 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-yellow-400 font-medium font-sans"
@@ -429,16 +437,16 @@ export default function CartSidebar({
                     </span>
                   </div>
 
-                  {/* Delivery */}
-                  <div className="flex justify-between text-green-500 dark:text-green-400">
-                    <span>Delivery Fee</span>
+                  {/* Delivery Fee - Only shown for Delivery */}
+                  {paymentMethod === 'Delivery' && (
+                    <div className="flex justify-between text-green-500 dark:text-green-400">
+                      <span>Delivery Fee</span>
 
-                    <span className="font-mono font-bold text-stone-800 dark:text-white">
-                      {paymentMethod === 'Pick-up'
-                        ? 'Free (Pick-up)'
-                        : 'To be communicated'}
-                    </span>
-                  </div>
+                      <span className="font-mono font-bold text-stone-800 dark:text-white">
+                        To be communicated
+                      </span>
+                    </div>
+                  )}
 
                   {/* Total */}
                   <div className="flex justify-between text-base font-black text-stone-900 dark:text-white border-t border-stone-200 dark:border-neutral-800 pt-2.5">

@@ -22,12 +22,12 @@ export interface FoodItem {
   image: string;
 
   category:
+    | 'Wings'
     | 'Noodles'
     | 'Burgers'
     | 'Shawarma'
     | 'Rice Meals'
     | 'Pasta'
-    | 'Wings'
     | 'Cocktail Wings'
     | 'Combo Deals'
     | 'Proteins'

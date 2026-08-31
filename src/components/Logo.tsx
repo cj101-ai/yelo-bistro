@@ -6,7 +6,7 @@ interface LogoProps {
   animateBounce?: boolean;
 }
 
-export default function Logo({ className = "w-12 h-12", animateBounce = true }: LogoProps) {
+export default function Logo({ className = "w-20 h-20", animateBounce = true }: LogoProps) {
   // Continuous smooth vertical animation with custom spring feel
   const bounceProps = animateBounce ? {
     transition: {
@@ -25,7 +25,7 @@ export default function Logo({ className = "w-12 h-12", animateBounce = true }: 
   {...bounceProps}
   whileHover={animateBounce ? { y: -3, scale: 1.08 } : {}}
   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-  className={`relative inline-block select-none cursor-pointer ${className}`}
+  className={`relative inline-block aspect-square overflow-hidden rounded-full select-none cursor-pointer ${className}`}
   id="yelo-logo-wrapper"
 >
 
@@ -36,7 +36,8 @@ export default function Logo({ className = "w-12 h-12", animateBounce = true }: 
       <img
       src="/favicon.png"
       alt="Yelo Bistro & Cafe Logo"
-      className="w-12 h-12 object-contain rounded-full" 
+      fetchPriority="high"
+      className="w-full h-full aspect-square object-cover rounded-full overflow-hidden" 
 />
     </motion.div>
   );
