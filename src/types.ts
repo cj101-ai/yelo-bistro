@@ -36,6 +36,7 @@ export interface FoodItem {
     | 'Juice & Drinks';
 
   isFeatured?: boolean;
+  available?: boolean;
   rating: number;
   prepTime: string;
   calories?: number;

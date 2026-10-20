@@ -12,7 +12,7 @@ export const FOOD_ITEMS: FoodItem[] = [
     image: "/images/noodles1.png",
     category: "Noodles",
     rating: 4.8,
-    prepTime: "10 mins",
+    prepTime: "5 mins",
     calories: 420,
 
      options: [
