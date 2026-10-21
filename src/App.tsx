@@ -40,14 +40,10 @@ import CartSidebar from './components/CartSidebar';
 import TrackingSection from './components/TrackingSection';
 import Footer from './components/Footer';
 
-
 /*
 |--------------------------------------------------------------------------
 | APP VIEWS
 |--------------------------------------------------------------------------
-|
-| These are the different full-page views controlled by App.tsx.
-|
 */
 
 type AppView =
@@ -61,15 +57,10 @@ type AppView =
   | 'product-management'
   | 'track';
 
-
 /*
 |--------------------------------------------------------------------------
 | NAVBAR TABS
 |--------------------------------------------------------------------------
-|
-| We keep the old navigation names here because your existing Navbar
-| and Footer may still use them.
-|
 */
 
 type OldNavigationTab =
@@ -78,7 +69,6 @@ type OldNavigationTab =
   | 'about'
   | 'contact'
   | 'track';
-
 
 export default function App() {
 
@@ -90,7 +80,6 @@ export default function App() {
 
   const [activeTab, setActiveTab] =
     React.useState<AppView>('home');
-
 
   /*
   |--------------------------------------------------------------------------
@@ -115,9 +104,12 @@ export default function App() {
 
   const [isAdmin, setIsAdmin] =
     React.useState(false);
-    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-    const [userFirstName, setUserFirstName] = React.useState('');
 
+  const [isLoggedIn, setIsLoggedIn] =
+    React.useState(false);
+
+  const [userFirstName, setUserFirstName] =
+    React.useState('');
 
   /*
   |--------------------------------------------------------------------------
@@ -130,7 +122,6 @@ export default function App() {
       () => window.location.hash.includes('type=recovery')
     );
 
-
   /*
   |--------------------------------------------------------------------------
   | WHATSAPP FLOATING CHAT
@@ -139,7 +130,6 @@ export default function App() {
 
   const [isWaOpen, setIsWaOpen] =
     React.useState(false);
-
 
   /*
   |--------------------------------------------------------------------------
@@ -150,7 +140,6 @@ export default function App() {
   const [customizingItem, setCustomizingItem] =
     React.useState<FoodItem | null>(null);
 
-
   /*
   |--------------------------------------------------------------------------
   | DARK MODE
@@ -158,7 +147,6 @@ export default function App() {
   */
 
   React.useEffect(() => {
-
     const root = window.document.documentElement;
 
     if (darkMode) {
@@ -166,9 +154,7 @@ export default function App() {
     } else {
       root.classList.remove('dark');
     }
-
   }, [darkMode]);
-
 
   /*
   |--------------------------------------------------------------------------
@@ -177,9 +163,7 @@ export default function App() {
   */
 
   React.useEffect(() => {
-
     try {
-
       const savedCart =
         localStorage.getItem('yelo_bistro_cart');
 
@@ -187,25 +171,16 @@ export default function App() {
         setCart(JSON.parse(savedCart));
       }
 
-
       const savedOrder =
         localStorage.getItem('yelo_bistro_order');
 
       if (savedOrder) {
         setActiveOrder(JSON.parse(savedOrder));
       }
-
     } catch (e) {
-
-      console.warn(
-        "Storage syncing failed",
-        e
-      );
-
+      console.warn("Storage syncing failed", e);
     }
-
   }, []);
-
 
   /*
   |--------------------------------------------------------------------------
@@ -214,22 +189,17 @@ export default function App() {
   */
 
   React.useEffect(() => {
-
     let mounted = true;
-
 
     const updateUserProfile =
       async (userId: string | null) => {
 
         if (!userId) {
-
           if (mounted) {
             setIsAdmin(false);
           }
-
           return;
         }
-
 
         const { data, error } =
           await supabase
@@ -238,32 +208,19 @@ export default function App() {
             .eq('id', userId)
             .single();
 
-
         if (error) {
-
-          console.error(
-            'PROFILE CHECK ERROR:',
-            error
-          );
+          console.error('PROFILE CHECK ERROR:', error);
 
           if (mounted) {
             setIsAdmin(false);
           }
-
           return;
         }
 
-
         if (mounted) {
-
-          setIsAdmin(
-            data?.role === 'admin'
-          );
-
+          setIsAdmin(data?.role === 'admin');
         }
-
       };
-
 
     /*
     |--------------------------------------------------------------------------
@@ -271,34 +228,40 @@ export default function App() {
     |--------------------------------------------------------------------------
     */
 
-  const checkCurrentUser = async () => {
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+    const checkCurrentUser = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
 
-  setIsLoggedIn(!!user);
+      if (!mounted) return;
 
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('full_name')
-      .eq('id', user.id)
-      .single();
+      setIsLoggedIn(!!user);
 
-    if (profile?.full_name) {
-      const firstName = profile.full_name.trim().split(' ')[0];
-      setUserFirstName(firstName);
-    }
-  } else {
-    setUserFirstName('');
-  }
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single();
 
-  await updateUserProfile(user?.id ?? null);
-};
+        if (!mounted) return;
 
+        if (profile?.full_name) {
+          const firstName =
+            profile.full_name.trim().split(' ')[0];
 
-    checkCurrentUser();
+          setUserFirstName(firstName);
+        } else {
+          setUserFirstName('');
+        }
+      } else {
+        setUserFirstName('');
+      }
 
+      await updateUserProfile(user?.id ?? null);
+    };
+
+    void checkCurrentUser();
 
     /*
     |--------------------------------------------------------------------------
@@ -308,51 +271,49 @@ export default function App() {
 
     const {
       data: { subscription }
-    } =
-      supabase.auth.onAuthStateChange(
-        async (event, session) => {
+    } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
 
-          console.log(
-            'AUTH STATE CHANGED:',
-            event
-          );
+        console.log('AUTH STATE CHANGED:', event);
 
+        if (event === 'SIGNED_IN') {
+          setIsLoggedIn(true);
 
-          if (event === 'SIGNED_IN') {
-  setIsLoggedIn(true);
+          if (session?.user) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('full_name')
+              .eq('id', session.user.id)
+              .single();
 
-  if (session?.user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('full_name')
-      .eq('id', session.user.id)
-      .single();
+            if (!mounted) return;
 
-    if (profile?.full_name) {
-      const firstName = profile.full_name.trim().split(' ')[0];
-      setUserFirstName(firstName);
-    }
-  }
+            if (profile?.full_name) {
+              const firstName =
+                profile.full_name.trim().split(' ')[0];
 
-  await updateUserProfile(
-    session?.user?.id ?? null
-  );
-}
+              setUserFirstName(firstName);
+            }
 
+            await updateUserProfile(
+              session.user.id
+            );
+          }
         }
-      );
 
+        if (event === 'SIGNED_OUT') {
+          setIsLoggedIn(false);
+          setIsAdmin(false);
+          setUserFirstName('');
+        }
+      }
+    );
 
     return () => {
-
       mounted = false;
-
       subscription.unsubscribe();
-
     };
-
   }, []);
-
 
   /*
   |--------------------------------------------------------------------------
@@ -361,31 +322,20 @@ export default function App() {
   */
 
   React.useEffect(() => {
-
     const {
       data: { subscription }
-    } =
-      supabase.auth.onAuthStateChange(
-        (event) => {
-
-          if (event === 'PASSWORD_RECOVERY') {
-
-            setIsPasswordReset(true);
-
-          }
-
+    } = supabase.auth.onAuthStateChange(
+      (event) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          setIsPasswordReset(true);
         }
-      );
-
+      }
+    );
 
     return () => {
-
       subscription.unsubscribe();
-
     };
-
   }, []);
-
 
   /*
   |--------------------------------------------------------------------------
@@ -394,38 +344,24 @@ export default function App() {
   */
 
   React.useEffect(() => {
+    const checkPasswordReset = async () => {
+      const hash = window.location.hash;
 
-    const checkPasswordReset =
-      async () => {
+      if (!hash.includes('type=recovery')) {
+        return;
+      }
 
-        const hash =
-          window.location.hash;
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
 
+      if (session) {
+        setIsPasswordReset(true);
+      }
+    };
 
-        if (!hash.includes('type=recovery')) {
-          return;
-        }
-
-
-        const {
-          data: { session }
-        } =
-          await supabase.auth.getSession();
-
-
-        if (session) {
-
-          setIsPasswordReset(true);
-
-        }
-
-      };
-
-
-    checkPasswordReset();
-
+    void checkPasswordReset();
   }, []);
-
 
   /*
   |--------------------------------------------------------------------------
@@ -434,11 +370,8 @@ export default function App() {
   */
 
   if (isPasswordReset) {
-
     return <UpdatePassword />;
-
   }
-
 
   /*
   |--------------------------------------------------------------------------
@@ -452,20 +385,14 @@ export default function App() {
       setCart(updatedCart);
 
       try {
-
         localStorage.setItem(
           'yelo_bistro_cart',
           JSON.stringify(updatedCart)
         );
-
       } catch (e) {
-
-        console.warn(e);
-
+        console.warn('Cart storage failed:', e);
       }
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
@@ -475,11 +402,8 @@ export default function App() {
 
   const handleAddToCart =
     (item: FoodItem) => {
-
       setCustomizingItem(item);
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
@@ -504,12 +428,10 @@ export default function App() {
           .sort()
           .join('|');
 
-
       const cartItemId =
         optionsKey
           ? `${item.id}__${optionsKey}`
           : item.id;
-
 
       const existing =
         cart.find(
@@ -517,12 +439,9 @@ export default function App() {
             cartItem.cartItemId === cartItemId
         );
 
-
       let updated: CartItem[];
 
-
       if (existing) {
-
         updated =
           cart.map(
             (cartItem) =>
@@ -530,18 +449,13 @@ export default function App() {
                 ? {
                     ...cartItem,
                     quantity:
-                      cartItem.quantity +
-                      quantity
+                      cartItem.quantity + quantity
                   }
                 : cartItem
           );
-
       } else {
-
         updated = [
-
           ...cart,
-
           {
             item,
             quantity,
@@ -549,16 +463,11 @@ export default function App() {
             unitPrice,
             cartItemId
           }
-
         ];
-
       }
 
-
       saveCartToStorage(updated);
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
@@ -575,52 +484,36 @@ export default function App() {
             cartItem.item.id === item.id
         );
 
-
       if (matchingItems.length === 0) {
         return;
       }
 
-
       const existing =
-        matchingItems[
-          matchingItems.length - 1
-        ];
-
+        matchingItems[matchingItems.length - 1];
 
       let updated: CartItem[];
 
-
       if (existing.quantity === 1) {
-
         updated =
           cart.filter(
             (cartItem) =>
-              cartItem.cartItemId !==
-              existing.cartItemId
+              cartItem.cartItemId !== existing.cartItemId
           );
-
       } else {
-
         updated =
           cart.map(
             (cartItem) =>
-              cartItem.cartItemId ===
-              existing.cartItemId
+              cartItem.cartItemId === existing.cartItemId
                 ? {
                     ...cartItem,
-                    quantity:
-                      cartItem.quantity - 1
+                    quantity: cartItem.quantity - 1
                   }
                 : cartItem
           );
-
       }
 
-
       saveCartToStorage(updated);
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
@@ -636,18 +529,13 @@ export default function App() {
 
       let updated: CartItem[];
 
-
       if (qty <= 0) {
-
         updated =
           cart.filter(
             (item) =>
-              item.cartItemId !==
-              cartItemId
+              item.cartItemId !== cartItemId
           );
-
       } else {
-
         updated =
           cart.map(
             (item) =>
@@ -658,14 +546,10 @@ export default function App() {
                   }
                 : item
           );
-
       }
 
-
       saveCartToStorage(updated);
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
@@ -679,237 +563,298 @@ export default function App() {
       const updated =
         cart.filter(
           (cartItem) =>
-            cartItem.cartItemId !==
-            cartItemId
+            cartItem.cartItemId !== cartItemId
         );
 
-
       saveCartToStorage(updated);
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
-  | PLACE ORDER
+  | PLACE ORDER — MOBILE-FRIENDLY CHECKOUT
   |--------------------------------------------------------------------------
   */
 
   const handlePlaceOrder =
     async (order: OrderDetails) => {
 
-      const orderItems =
-        order.items.map(
-          (cartItem) => ({
+      /*
+       * Open the WhatsApp tab immediately, while the checkout
+       * button's user interaction is still active. Some mobile
+       * browsers block tabs opened after an awaited network request.
+       */
+      let whatsappWindow: Window | null = null;
 
-            product_name:
-              cartItem.item.name,
+      try {
+        whatsappWindow = window.open('about:blank', '_blank');
 
-            quantity:
-              cartItem.quantity,
+        if (whatsappWindow) {
+          whatsappWindow.opener = null;
+        }
+      } catch (popupError) {
+        console.warn(
+          'Could not open WhatsApp tab in advance:',
+          popupError
+        );
+      }
 
-            price:
-              cartItem.unitPrice,
+      try {
 
+        /*
+        |--------------------------------------------------------------------------
+        | PREPARE ORDER ITEMS
+        |--------------------------------------------------------------------------
+        */
+
+        const orderItems =
+          order.items.map((cartItem) => ({
+            product_name: cartItem.item.name,
+            quantity: cartItem.quantity,
+            price: cartItem.unitPrice,
             subtotal:
-              cartItem.unitPrice *
-              cartItem.quantity,
-
+              cartItem.unitPrice * cartItem.quantity,
             selected_options:
               cartItem.selectedOptions || []
+          }));
 
-          })
-        );
+        /*
+        |--------------------------------------------------------------------------
+        | SAVE ORDER TO SUPABASE
+        |--------------------------------------------------------------------------
+        */
 
-
-      /*
-      |--------------------------------------------------------------------------
-      | SAVE ORDER TO SUPABASE
-      |--------------------------------------------------------------------------
-      */
-
-      const {
-        data: savedOrderId,
-        error: orderError
-      } =
-        await supabase.rpc(
+        const {
+          data: savedOrderId,
+          error: orderError
+        } = await supabase.rpc(
           'create_yelo_order',
           {
-            p_customer_name:
-              order.customerName,
-
-            p_customer_phone:
-              order.phone,
-
-            p_delivery_address:
-              order.address,
-
-            p_total_amount:
-              order.total,
-
-            p_items:
-              orderItems
+            p_customer_name: order.customerName,
+            p_customer_phone: order.phone,
+            p_delivery_address: order.address,
+            p_total_amount: order.total,
+            p_items: orderItems
           }
         );
 
+        if (orderError) {
+          console.error('ORDER SAVE ERROR:', {
+            message: orderError.message,
+            code: orderError.code,
+            details: orderError.details,
+            hint: orderError.hint,
+            error: orderError
+          });
 
-      if (orderError) {
-
-        console.error(
-          'ORDER SAVE ERROR:',
-          orderError
-        );
-
-        alert(
-          'There was a problem saving your order. Please try again.'
-        );
-
-        return;
-
-      }
-
-
-      console.log(
-        'ORDER SAVED SUCCESSFULLY:',
-        savedOrderId
-      );
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | CREATE FINAL ORDER
-      |--------------------------------------------------------------------------
-      */
-
-      const finalOrder = {
-
-        ...order,
-
-        id: savedOrderId
-
-      };
-
-
-      setActiveOrder(
-        finalOrder
-      );
-
-
-      localStorage.setItem(
-        "yelo_bistro_order",
-        JSON.stringify(finalOrder)
-      );
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | WHATSAPP MESSAGE
-      |--------------------------------------------------------------------------
-      */
-
-      let message =
-        `🍽️ *NEW YELO BISTRO WEBSITE ORDER*\n\n`;
-
-
-      message +=
-        `🆔 Order ID: ${finalOrder.id}\n\n`;
-
-
-      message +=
-        `👤 Name: ${order.customerName}\n`;
-
-
-      message +=
-        `📞 Phone: ${order.phone}\n`;
-
-
-      message +=
-        `📍 Address: ${order.address}\n\n`;
-
-
-      message +=
-        `🛒 *Items Ordered*\n`;
-
-
-      order.items.forEach(
-        ({
-          item,
-          quantity,
-          selectedOptions,
-          unitPrice
-        }) => {
-
-          message +=
-            `• ${item.name} x${quantity} - ₦${(
-              unitPrice * quantity
-            ).toLocaleString()}\n`;
-
-
-          if (
-            selectedOptions &&
-            selectedOptions.length > 0
-          ) {
-
-            selectedOptions.forEach(
-              (option) => {
-
-                message +=
-                  `   - ${option.groupName}: ${option.choiceName}\n`;
-
-              }
-            );
-
+          if (whatsappWindow && !whatsappWindow.closed) {
+            whatsappWindow.close();
           }
 
+          const errorDetails = [
+            orderError.message,
+            orderError.code
+              ? `Error code: ${orderError.code}`
+              : '',
+            orderError.details
+              ? `Details: ${orderError.details}`
+              : '',
+            orderError.hint
+              ? `Hint: ${orderError.hint}`
+              : ''
+          ].filter(Boolean).join('\n');
+
+          alert(
+            `Your order could not be saved to the database.\n\n${errorDetails || 'Please try again.'}`
+          );
+
+          return;
         }
-      );
 
+        /*
+         * The RPC is expected to return the saved order ID.
+         * Do not continue to WhatsApp if it did not return one,
+         * because the tracking ID could otherwise be incorrect.
+         */
+        if (
+          savedOrderId === null ||
+          savedOrderId === undefined ||
+          savedOrderId === ''
+        ) {
+          console.error(
+            'ORDER SAVE ERROR: Supabase did not return an order ID.',
+            savedOrderId
+          );
 
-      message +=
-        `\n💰 Total: ₦${order.total.toFixed(2)}\n`;
+          if (whatsappWindow && !whatsappWindow.closed) {
+            whatsappWindow.close();
+          }
 
+          alert(
+            'Supabase did not return an order ID. Please check your orders table before trying again, so you do not accidentally create a duplicate order.'
+          );
 
-      message +=
-        ` Mode of Recieval: ${order.paymentMethod}\n`;
+          return;
+        }
 
+        console.log(
+          'ORDER SAVED SUCCESSFULLY:',
+          savedOrderId
+        );
 
-      if (order.notes) {
+        /*
+        |--------------------------------------------------------------------------
+        | CREATE FINAL ORDER
+        |--------------------------------------------------------------------------
+        */
+
+        const finalOrder: OrderDetails = {
+          ...order,
+          id: savedOrderId
+        };
+
+        setActiveOrder(finalOrder);
+
+        try {
+          localStorage.setItem(
+            'yelo_bistro_order',
+            JSON.stringify(finalOrder)
+          );
+        } catch (storageError) {
+          console.warn(
+            'Could not save active order locally:',
+            storageError
+          );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | BUILD WHATSAPP MESSAGE
+        |--------------------------------------------------------------------------
+        */
+
+        let message =
+          `🍽️ *NEW YELO BISTRO WEBSITE ORDER*\n\n`;
 
         message +=
-          `📝 Notes: ${order.notes}\n`;
+          `🆔 Order ID: ${finalOrder.id}\n\n`;
 
+        message +=
+          `👤 Name: ${order.customerName}\n`;
+
+        message +=
+          `📞 Phone: ${order.phone}\n`;
+
+        message +=
+          `📍 Address: ${order.address}\n\n`;
+
+        message +=
+          `🛒 *Items Ordered*\n`;
+
+        order.items.forEach(
+          ({
+            item,
+            quantity,
+            selectedOptions,
+            unitPrice
+          }) => {
+
+            message +=
+              `• ${item.name} x${quantity} - ₦${(
+                unitPrice * quantity
+              ).toLocaleString()}\n`;
+
+            if (
+              selectedOptions &&
+              selectedOptions.length > 0
+            ) {
+              selectedOptions.forEach((option) => {
+                message +=
+                  `   - ${option.groupName}: ${option.choiceName}\n`;
+              });
+            }
+          }
+        );
+
+        message +=
+          `\n💰 Total: ₦${order.total.toLocaleString()}\n`;
+
+        message +=
+          `Mode of Receipt: ${order.paymentMethod}\n`;
+
+        if (order.notes) {
+          message +=
+            `📝 Notes: ${order.notes}\n`;
+        }
+
+        const whatsappNumber = '2349069125598';
+
+        const whatsappUrl =
+          `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+        /*
+        |--------------------------------------------------------------------------
+        | CLEAR CART AFTER SUCCESSFUL SAVE
+        |--------------------------------------------------------------------------
+        */
+
+        saveCartToStorage([]);
+
+        setIsCartOpen(false);
+        setActiveTab('home');
+
+        /*
+        |--------------------------------------------------------------------------
+        | REDIRECT TO WHATSAPP
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+          whatsappWindow &&
+          !whatsappWindow.closed
+        ) {
+          /*
+           * Navigate the tab opened during the original click.
+           */
+          try {
+            whatsappWindow.location.href = whatsappUrl;
+          } catch (navigationError) {
+            console.error(
+              'Could not navigate the WhatsApp tab:',
+              navigationError
+            );
+
+            window.location.assign(whatsappUrl);
+          }
+        } else {
+          /*
+           * If the browser blocked the new tab, use the current
+           * page as a fallback. This helps on restrictive mobile
+           * browsers, though it takes the customer away from the site.
+           */
+          window.location.assign(whatsappUrl);
+        }
+
+      } catch (error) {
+
+        console.error(
+          'UNEXPECTED CHECKOUT ERROR:',
+          error
+        );
+
+        if (whatsappWindow && !whatsappWindow.closed) {
+          whatsappWindow.close();
+        }
+
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : String(error);
+
+        alert(
+          `Something went wrong while processing your order.\n\n${errorMessage}\n\nYour cart has not been cleared. Check your orders table before trying again, in case the order was already saved.`
+        );
       }
-
-
-      const whatsappNumber =
-        "2349069125598";
-
-
-      window.open(
-        `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`,
-        "_blank"
-      );
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | CLEAR CART
-      |--------------------------------------------------------------------------
-      */
-
-      saveCartToStorage([]);
-
-
-      /*
-      |--------------------------------------------------------------------------
-      | RETURN HOME
-      |--------------------------------------------------------------------------
-      */
-
-      setActiveTab('home');
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
@@ -917,29 +862,18 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleResetOrder =
-    () => {
+  const handleResetOrder = () => {
 
-      setActiveOrder(null);
+    setActiveOrder(null);
 
+    try {
+      localStorage.removeItem('yelo_bistro_order');
+    } catch (e) {
+      console.warn(e);
+    }
 
-      try {
-
-        localStorage.removeItem(
-          'yelo_bistro_order'
-        );
-
-      } catch (e) {
-
-        console.warn(e);
-
-      }
-
-
-      setActiveTab('home');
-
-    };
-
+    setActiveTab('home');
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -948,14 +882,11 @@ export default function App() {
   */
 
   const goToTop = () => {
-
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-
   };
-
 
   /*
   |--------------------------------------------------------------------------
@@ -963,15 +894,10 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleCreateAccount =
-    () => {
-
-      setActiveTab('signup');
-
-      goToTop();
-
-    };
-
+  const handleCreateAccount = () => {
+    setActiveTab('signup');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -979,15 +905,10 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleBackToLogin =
-    () => {
-
-      setActiveTab('login');
-
-      goToTop();
-
-    };
-
+  const handleBackToLogin = () => {
+    setActiveTab('login');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -995,15 +916,10 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleLoginSuccess =
-    () => {
-
-      setActiveTab('profile');
-
-      goToTop();
-
-    };
-
+  const handleLoginSuccess = () => {
+    setActiveTab('profile');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -1011,15 +927,10 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleAccountCreated =
-    () => {
-
-      setActiveTab('profile');
-
-      goToTop();
-
-    };
-
+  const handleAccountCreated = () => {
+    setActiveTab('profile');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -1027,15 +938,10 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleLogout =
-    () => {
-
-      setActiveTab('home');
-
-      goToTop();
-
-    };
-
+  const handleLogout = () => {
+    setActiveTab('home');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -1043,15 +949,10 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleMyOrders =
-    () => {
-
-      setActiveTab('my-orders');
-
-      goToTop();
-
-    };
-
+  const handleMyOrders = () => {
+    setActiveTab('my-orders');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -1059,23 +960,21 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleCustomerOrders =
-    () => {
-
-      setActiveTab('customer-orders');
-
-      goToTop();
-
-    };
-    const handleCustomerManagement =
-  () => {
-
-    setActiveTab('customer-management');
-
+  const handleCustomerOrders = () => {
+    setActiveTab('customer-orders');
     goToTop();
-
   };
 
+  /*
+  |--------------------------------------------------------------------------
+  | PROFILE → CUSTOMER MANAGEMENT
+  |--------------------------------------------------------------------------
+  */
+
+  const handleCustomerManagement = () => {
+    setActiveTab('customer-management');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -1083,25 +982,15 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleProductManagement =
-    () => {
-
-      setActiveTab(
-        'product-management'
-      );
-
-      goToTop();
-
-    };
-
+  const handleProductManagement = () => {
+    setActiveTab('product-management');
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
   | HOME SECTION NAVIGATION
   |--------------------------------------------------------------------------
-  |
-  | Menu, About and Contact remain sections of Home.
-  |
   */
 
   const goToHomeSection =
@@ -1109,57 +998,48 @@ export default function App() {
 
       setActiveTab('home');
 
-
-      setTimeout(() => {
+      window.setTimeout(() => {
 
         if (section === 'home') {
-
           window.scrollTo({
             top: 0,
             behavior: 'smooth'
           });
-
           return;
-
         }
 
-
         const element =
-          document.getElementById(
-            `home-${section}`
-          );
-
+          document.getElementById(`home-${section}`);
 
         if (element) {
-
           element.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
-
         }
-
       }, 50);
-
     };
-
 
   /*
   |--------------------------------------------------------------------------
   | NAVBAR COMPATIBILITY HANDLER
   |--------------------------------------------------------------------------
-  |
-  | Your existing Navbar may still use:
-  | home / menu / about / contact / track
-  |
-  | We translate those into the new App navigation.
-  |
   */
 
   const handleNavbarTab = (tab: any) => {
-  setActiveTab(tab);
-};
 
+    if (
+      tab === 'menu' ||
+      tab === 'about' ||
+      tab === 'contact'
+    ) {
+      goToHomeSection(tab);
+      return;
+    }
+
+    setActiveTab(tab);
+    goToTop();
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -1167,59 +1047,34 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const getIconComponent =
-    (iconName: string) => {
+  const getIconComponent = (iconName: string) => {
 
-      switch (iconName) {
+    switch (iconName) {
 
-        case 'Utensils':
+      case 'Utensils':
+        return (
+          <Utensils className="w-6 h-6 text-red-500" />
+        );
 
-          return (
-            <Utensils
-              className="w-6 h-6 text-red-500"
-            />
-          );
+      case 'Clock':
+        return (
+          <Clock className="w-6 h-6 text-yellow-500" />
+        );
 
+      case 'Cake':
+        return (
+          <Cake className="w-6 h-6 text-emerald-500" />
+        );
 
-        case 'Clock':
+      case 'MessageSquare':
+        return (
+          <MessageSquare className="w-6 h-6 text-amber-500" />
+        );
 
-          return (
-            <Clock
-              className="w-6 h-6 text-yellow-500"
-            />
-          );
-
-
-        case 'Cake':
-
-          return (
-            <Cake
-              className="w-6 h-6 text-emerald-500"
-            />
-          );
-
-
-        case 'MessageSquare':
-
-          return (
-            <MessageSquare
-              className="w-6 h-6 text-amber-500"
-            />
-          );
-
-
-        default:
-
-          return (
-            <Coffee
-              className="w-6 h-6"
-            />
-          );
-
-      }
-
-    };
-
+      default:
+        return <Coffee className="w-6 h-6" />;
+    }
+  };
 
   /*
   |--------------------------------------------------------------------------
@@ -1228,7 +1083,6 @@ export default function App() {
   */
 
   return (
-
     <div
       className="
         min-h-screen
@@ -1244,10 +1098,7 @@ export default function App() {
       "
     >
 
-
-      {/* ================================================================
-          NAVBAR
-      ================================================================= */}
+      {/* NAVBAR */}
 
       <Navbar
         activeTab={activeTab as any}
@@ -1261,17 +1112,12 @@ export default function App() {
         userFirstName={userFirstName}
       />
 
-
-      {/* ================================================================
-          PRODUCT OPTIONS MODAL
-      ================================================================= */}
+      {/* PRODUCT OPTIONS MODAL */}
 
       <ProductOptionsModal
         isOpen={!!customizingItem}
         item={customizingItem}
-        onClose={() =>
-          setCustomizingItem(null)
-        }
+        onClose={() => setCustomizingItem(null)}
         onAddToCart={(
           item,
           selectedOptions,
@@ -1287,445 +1133,202 @@ export default function App() {
           );
 
           setCustomizingItem(null);
-
         }}
       />
 
-
-      {/* ================================================================
-          CART SIDEBAR
-      ================================================================= */}
+      {/* CART SIDEBAR */}
 
       <CartSidebar
         isOpen={isCartOpen}
-        onClose={() =>
-          setIsCartOpen(false)
-        }
+        onClose={() => setIsCartOpen(false)}
         cart={cart}
-        onUpdateQuantity={
-          handleUpdateQuantity
-        }
-        onRemoveItem={
-          handleRemoveItem
-        }
-        onPlaceOrder={
-          handlePlaceOrder
-        }
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+        onPlaceOrder={handlePlaceOrder}
       />
 
-
-      {/* ================================================================
-          MAIN CONTENT
-      ================================================================= */}
+      {/* MAIN CONTENT */}
 
       <main className="flex-grow">
 
         <AnimatePresence mode="wait">
 
-
-          {/* ============================================================
-              HOME
-          ============================================================= */}
+          {/* HOME */}
 
           {activeTab === 'home' && (
-
             <motion.div
               key="tab-home"
-              initial={{
-                opacity: 0
-              }}
-              animate={{
-                opacity: 1
-              }}
-              exit={{
-                opacity: 0
-              }}
-              transition={{
-                duration: 0.3
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               id="home-tab-wrapper"
             >
 
-
-              {/* --------------------------------------------------------
-                  HERO
-              --------------------------------------------------------- */}
-
               <div id="home">
-
                 <Hero
-                  onOrderNow={() =>
-                    goToHomeSection('menu')
-                  }
-                  onViewMenu={() =>
-                    goToHomeSection('menu')
-                  }
+                  onOrderNow={() => goToHomeSection('menu')}
+                  onViewMenu={() => goToHomeSection('menu')}
                 />
-
               </div>
-
-
-              {/* --------------------------------------------------------
-                  FEATURED CAROUSEL
-              --------------------------------------------------------- */}
 
               <FeaturedCarousel
                 cart={cart}
-                onAddToCart={
-                  handleAddToCart
-                }
-                onRemoveFromCart={
-                  handleRemoveFromCart
-                }
+                onAddToCart={handleAddToCart}
+                onRemoveFromCart={handleRemoveFromCart}
               />
 
-
-              {/* --------------------------------------------------------
-                  MENU
-              --------------------------------------------------------- */}
-
               <div id="home-menu">
-
                 <MenuSection
-                  onAddToCart={
-                    handleAddToCart
-                  }
-                  onRemoveFromCart={
-                    handleRemoveFromCart
-                  }
+                  onAddToCart={handleAddToCart}
+                  onRemoveFromCart={handleRemoveFromCart}
                   cart={cart}
                   compact={false}
                 />
-
               </div>
-
-
-              {/* --------------------------------------------------------
-                  ABOUT
-              --------------------------------------------------------- */}
 
               <div id="home-about">
-
                 <AboutSection />
-
               </div>
-
-
-              {/* --------------------------------------------------------
-                  CONTACT
-              --------------------------------------------------------- */}
 
               <div id="home-contact">
-
                 <ContactSection />
-
               </div>
 
-
             </motion.div>
-
           )}
 
-
-          {/* ============================================================
-              LOGIN
-          ============================================================= */}
+          {/* LOGIN */}
 
           {activeTab === 'login' && (
-
             <motion.div
               key="tab-login"
-              initial={{
-                opacity: 0,
-                y: 10
-              }}
-              animate={{
-                opacity: 1,
-                y: 0
-              }}
-              exit={{
-                opacity: 0,
-                y: -10
-              }}
-              transition={{
-                duration: 0.25
-              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
             >
-
               <Login
-                onCreateAccount={
-                  handleCreateAccount
-                }
-                onLoginSuccess={
-                  handleLoginSuccess
-                }
+                onCreateAccount={handleCreateAccount}
+                onLoginSuccess={handleLoginSuccess}
               />
-
             </motion.div>
-
           )}
 
-
-          {/* ============================================================
-              SIGNUP
-          ============================================================= */}
+          {/* SIGNUP */}
 
           {activeTab === 'signup' && (
-
             <motion.div
               key="tab-signup"
-              initial={{
-                opacity: 0,
-                y: 10
-              }}
-              animate={{
-                opacity: 1,
-                y: 0
-              }}
-              exit={{
-                opacity: 0,
-                y: -10
-              }}
-              transition={{
-                duration: 0.25
-              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
             >
-
               <Signup
-                onAccountCreated={
-                  handleAccountCreated
-                }
-                onBackToLogin={
-                  handleBackToLogin
-                }
+                onAccountCreated={handleAccountCreated}
+                onBackToLogin={handleBackToLogin}
               />
-
             </motion.div>
-
           )}
 
-
-          {/* ============================================================
-              PROFILE
-          ============================================================= */}
+          {/* PROFILE */}
 
           {activeTab === 'profile' && (
-
             <motion.div
               key="tab-profile"
-              initial={{
-                opacity: 0,
-                y: 10
-              }}
-              animate={{
-                opacity: 1,
-                y: 0
-              }}
-              exit={{
-                opacity: 0,
-                y: -10
-              }}
-              transition={{
-                duration: 0.25
-              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
             >
-
               <CustomerDashboard
-                onMyOrders={
-                  handleMyOrders
-                }
-                onCustomerOrders={
-                  handleCustomerOrders
-                }
-                onCustomerManagement={
-    handleCustomerManagement
-  }
-                onProductManagement={
-                  handleProductManagement
-                }
-                onLogout={
-                  handleLogout
-                }
+                onMyOrders={handleMyOrders}
+                onCustomerOrders={handleCustomerOrders}
+                onCustomerManagement={handleCustomerManagement}
+                onProductManagement={handleProductManagement}
+                onLogout={handleLogout}
               />
-
             </motion.div>
-
           )}
 
-
-          {/* ============================================================
-              MY ORDERS
-          ============================================================= */}
+          {/* MY ORDERS */}
 
           {activeTab === 'my-orders' && (
-
             <motion.div
               key="tab-my-orders"
-              initial={{
-                opacity: 0,
-                y: 10
-              }}
-              animate={{
-                opacity: 1,
-                y: 0
-              }}
-              exit={{
-                opacity: 0,
-                y: -10
-              }}
-              transition={{
-                duration: 0.25
-              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
             >
-
               <MyOrders />
-
             </motion.div>
-
           )}
 
+          {/* CUSTOMER ORDERS — ADMIN ONLY */}
 
-          {/* ============================================================
-              CUSTOMER ORDERS — ADMIN ONLY
-          ============================================================= */}
+          {activeTab === 'customer-orders' && isAdmin && (
+            <motion.div
+              key="tab-customer-orders"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <AdminOrders />
+            </motion.div>
+          )}
 
-          {activeTab === 'customer-orders' &&
-            isAdmin && (
+          {/* CUSTOMER MANAGEMENT — ADMIN ONLY */}
 
-              <motion.div
-                key="tab-customer-orders"
-                initial={{
-                  opacity: 0,
-                  y: 10
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0
-                }}
-                exit={{
-                  opacity: 0,
-                  y: -10
-                }}
-                transition={{
-                  duration: 0.25
-                }}
-              >
+          {activeTab === 'customer-management' && isAdmin && (
+            <motion.div
+              key="tab-customer-management"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <CustomerManagement />
+            </motion.div>
+          )}
 
-                <AdminOrders />
+          {/* PRODUCT MANAGEMENT — ADMIN ONLY */}
 
-              </motion.div>
+          {activeTab === 'product-management' && isAdmin && (
+            <motion.div
+              key="tab-product-management"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <AdminProducts />
+            </motion.div>
+          )}
 
-            )}
-            {/* ============================================================
-    CUSTOMER MANAGEMENT — ADMIN ONLY
-============================================================= */}
-
-{activeTab === 'customer-management' &&
-  isAdmin && (
-
-    <motion.div
-      key="tab-customer-management"
-      initial={{
-        opacity: 0,
-        y: 10
-      }}
-      animate={{
-        opacity: 1,
-        y: 0
-      }}
-      exit={{
-        opacity: 0,
-        y: -10
-      }}
-      transition={{
-        duration: 0.25
-      }}
-    >
-
-      <CustomerManagement />
-
-    </motion.div>
-
-  )}
-
-
-          {/* ============================================================
-              PRODUCT MANAGEMENT — ADMIN ONLY
-          ============================================================= */}
-
-          {activeTab === 'product-management' &&
-            isAdmin && (
-
-              <motion.div
-                key="tab-product-management"
-                initial={{
-                  opacity: 0,
-                  y: 10
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0
-                }}
-                exit={{
-                  opacity: 0,
-                  y: -10
-                }}
-                transition={{
-                  duration: 0.25
-                }}
-              >
-
-                <AdminProducts />
-
-              </motion.div>
-
-            )}
-
-
-          {/* ============================================================
-              ORDER TRACKING
-          ============================================================= */}
+          {/* ORDER TRACKING */}
 
           {activeTab === 'track' && (
-
             <motion.div
               key="tab-track"
-              initial={{
-                opacity: 0,
-                scale: 0.98
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1
-              }}
-              exit={{
-                opacity: 0
-              }}
-              transition={{
-                duration: 0.3
-              }}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
-
               <TrackingSection
                 order={activeOrder}
-                onResetOrder={
-                  handleResetOrder
-                }
+                onResetOrder={handleResetOrder}
               />
-
             </motion.div>
-
           )}
 
-
         </AnimatePresence>
-
       </main>
 
-
-      {/* ================================================================
-          FLOATING WHATSAPP
-      ================================================================= */}
+      {/* FLOATING WHATSAPP */}
 
       <div
         className="
@@ -1741,18 +1344,10 @@ export default function App() {
         "
         id="floating-widgets"
       >
-
-        <div
-          className="
-            relative
-            pointer-events-auto
-          "
-        >
+        <div className="relative pointer-events-auto">
 
           <AnimatePresence>
-
             {isWaOpen && (
-
               <motion.div
                 initial={{
                   opacity: 0,
@@ -1803,9 +1398,7 @@ export default function App() {
                     dark:border-neutral-800
                   "
                 >
-
                   <div className="relative">
-
                     <span
                       className="
                         absolute
@@ -1837,12 +1430,9 @@ export default function App() {
                     >
                       YB
                     </div>
-
                   </div>
 
-
                   <div>
-
                     <h4
                       className="
                         font-extrabold
@@ -1850,7 +1440,9 @@ export default function App() {
                         text-stone-900
                         dark:text-white
                       "
-                    />
+                    >
+                      Yelo Bistro
+                    </h4>
 
                     <p
                       className="
@@ -1862,11 +1454,8 @@ export default function App() {
                     >
                       Yelo Bistro
                     </p>
-
                   </div>
-
                 </div>
-
 
                 <p
                   className="
@@ -1879,19 +1468,15 @@ export default function App() {
                   "Hey there welcome to yelobistro Whatsapp platform chat with victoria to place your order or make enquires"
                 </p>
 
-
                 <button
                   onClick={() => {
-
                     const text =
                       "Hi Yelo Bistro! i would like to place an order";
-
 
                     window.open(
                       `https://wa.me/2349069125598?text=${encodeURIComponent(text)}`,
                       '_blank'
                     );
-
                   }}
                   className="
                     w-full
@@ -1910,27 +1495,17 @@ export default function App() {
                     text-xs
                   "
                 >
-
-                  <MessageCircle
-                    className="w-3.5 h-3.5"
-                  />
-
+                  <MessageCircle className="w-3.5 h-3.5" />
                   Connect WhatsApp
-
                 </button>
 
               </motion.div>
-
             )}
-
           </AnimatePresence>
-
 
           <button
             id="floating-whatsapp-widget"
-            onClick={() =>
-              setIsWaOpen(!isWaOpen)
-            }
+            onClick={() => setIsWaOpen(!isWaOpen)}
             className="
               p-4
               bg-emerald-500
@@ -1946,48 +1521,33 @@ export default function App() {
             "
             title="Open Kitchen Live Chat"
           >
-
             <FaWhatsapp
               size={28}
               color="white"
               className="w-6 h-6"
             />
-
           </button>
 
         </div>
-
       </div>
 
-
-      {/* ================================================================
-          FOOTER
-      ================================================================= */}
+      {/* FOOTER */}
 
       <Footer
-        setActiveTab={
-          (tab: OldNavigationTab) => {
-
-            handleNavbarTab(tab);
-
-          }
-        }
+        setActiveTab={(tab: OldNavigationTab) => {
+          handleNavbarTab(tab);
+        }}
       />
 
-
-      {/* ================================================================
-          TOASTER
-      ================================================================= */}
+      {/* TOASTER */}
 
       <Toaster
         position="top-right"
         toastOptions={{
-          duration: 3000,
+          duration: 3000
         }}
       />
 
     </div>
-
   );
-
 }
