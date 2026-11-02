@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { FaWhatsapp } from "react-icons/fa";
 import { supabase } from './lib/supabase';
@@ -26,6 +27,8 @@ import Login from './components/auth/Login';
 import UpdatePassword from './components/auth/UpdatePassword';
 import CustomerDashboard from './components/dashboard/CustomerDashboard';
 import MyOrders from './components/dashboard/MyOrders';
+
+import AdminDashboard from './components/dashboard/AdminDashboard';
 import AdminOrders from './components/admin/AdminOrders';
 import AdminProducts from './components/admin/AdminProducts';
 import CustomerManagement from './components/admin/CustomerManagement';
@@ -102,8 +105,11 @@ export default function App() {
   const [activeOrder, setActiveOrder] =
     React.useState<OrderDetails | null>(null);
 
-  const [isAdmin, setIsAdmin] =
-    React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);
+const [isSubAdmin, setIsSubAdmin] = React.useState(false);
+const [isRoleLoading, setIsRoleLoading] = React.useState(true);
+
+const isStaff = isAdmin || isSubAdmin;
 
   const [isLoggedIn, setIsLoggedIn] =
     React.useState(false);
@@ -191,36 +197,54 @@ export default function App() {
   React.useEffect(() => {
     let mounted = true;
 
-    const updateUserProfile =
-      async (userId: string | null) => {
+    const updateUserProfile = async (userId: string | null) => {
+  if (!userId) {
+    if (mounted) {
+      setIsAdmin(false);
+      setIsSubAdmin(false);
+      setIsRoleLoading(false);
+    }
+    return;
+  }
 
-        if (!userId) {
-          if (mounted) {
-            setIsAdmin(false);
-          }
-          return;
-        }
+  if (mounted) {
+    setIsRoleLoading(true);
+  }
 
-        const { data, error } =
-          await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', userId)
-            .single();
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', userId)
+      .single();
 
-        if (error) {
-          console.error('PROFILE CHECK ERROR:', error);
+    if (error) {
+      console.error('PROFILE CHECK ERROR:', error);
 
-          if (mounted) {
-            setIsAdmin(false);
-          }
-          return;
-        }
+      if (mounted) {
+        setIsAdmin(false);
+        setIsSubAdmin(false);
+      }
+      return;
+    }
 
-        if (mounted) {
-          setIsAdmin(data?.role === 'admin');
-        }
-      };
+    if (mounted) {
+      setIsAdmin(data?.role === 'admin');
+      setIsSubAdmin(data?.role === 'sub_admin');
+    }
+  } catch (error) {
+    console.error('Unexpected role check error:', error);
+
+    if (mounted) {
+      setIsAdmin(false);
+      setIsSubAdmin(false);
+    }
+  } finally {
+    if (mounted) {
+      setIsRoleLoading(false);
+    }
+  }
+};
 
     /*
     |--------------------------------------------------------------------------
@@ -301,11 +325,13 @@ export default function App() {
           }
         }
 
-        if (event === 'SIGNED_OUT') {
-          setIsLoggedIn(false);
-          setIsAdmin(false);
-          setUserFirstName('');
-        }
+      if (event === 'SIGNED_OUT') {
+  setIsLoggedIn(false);
+  setIsAdmin(false);
+  setIsSubAdmin(false);
+  setIsRoleLoading(false);
+  setUserFirstName('');
+}
       }
     );
 
@@ -578,11 +604,6 @@ export default function App() {
   const handlePlaceOrder =
     async (order: OrderDetails) => {
 
-      /*
-       * Open the WhatsApp tab immediately, while the checkout
-       * button's user interaction is still active. Some mobile
-       * browsers block tabs opened after an awaited network request.
-       */
       let whatsappWindow: Window | null = null;
 
       try {
@@ -600,12 +621,6 @@ export default function App() {
 
       try {
 
-        /*
-        |--------------------------------------------------------------------------
-        | PREPARE ORDER ITEMS
-        |--------------------------------------------------------------------------
-        */
-
         const orderItems =
           order.items.map((cartItem) => ({
             product_name: cartItem.item.name,
@@ -616,12 +631,6 @@ export default function App() {
             selected_options:
               cartItem.selectedOptions || []
           }));
-
-        /*
-        |--------------------------------------------------------------------------
-        | SAVE ORDER TO SUPABASE
-        |--------------------------------------------------------------------------
-        */
 
         const {
           data: savedOrderId,
@@ -670,11 +679,6 @@ export default function App() {
           return;
         }
 
-        /*
-         * The RPC is expected to return the saved order ID.
-         * Do not continue to WhatsApp if it did not return one,
-         * because the tracking ID could otherwise be incorrect.
-         */
         if (
           savedOrderId === null ||
           savedOrderId === undefined ||
@@ -701,12 +705,6 @@ export default function App() {
           savedOrderId
         );
 
-        /*
-        |--------------------------------------------------------------------------
-        | CREATE FINAL ORDER
-        |--------------------------------------------------------------------------
-        */
-
         const finalOrder: OrderDetails = {
           ...order,
           id: savedOrderId
@@ -725,12 +723,6 @@ export default function App() {
             storageError
           );
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | BUILD WHATSAPP MESSAGE
-        |--------------------------------------------------------------------------
-        */
 
         let message =
           `🍽️ *NEW YELO BISTRO WEBSITE ORDER*\n\n`;
@@ -779,7 +771,7 @@ export default function App() {
           `\n💰 Total: ₦${order.total.toLocaleString()}\n`;
 
         message +=
-          `Mode of Receipt: ${order.paymentMethod}\n`;
+          `Mode of Recieval: ${order.paymentMethod}\n`;
 
         if (order.notes) {
           message +=
@@ -791,30 +783,15 @@ export default function App() {
         const whatsappUrl =
           `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-        /*
-        |--------------------------------------------------------------------------
-        | CLEAR CART AFTER SUCCESSFUL SAVE
-        |--------------------------------------------------------------------------
-        */
-
         saveCartToStorage([]);
 
         setIsCartOpen(false);
         setActiveTab('home');
 
-        /*
-        |--------------------------------------------------------------------------
-        | REDIRECT TO WHATSAPP
-        |--------------------------------------------------------------------------
-        */
-
         if (
           whatsappWindow &&
           !whatsappWindow.closed
         ) {
-          /*
-           * Navigate the tab opened during the original click.
-           */
           try {
             whatsappWindow.location.href = whatsappUrl;
           } catch (navigationError) {
@@ -826,11 +803,6 @@ export default function App() {
             window.location.assign(whatsappUrl);
           }
         } else {
-          /*
-           * If the browser blocked the new tab, use the current
-           * page as a fallback. This helps on restrictive mobile
-           * browsers, though it takes the customer away from the site.
-           */
           window.location.assign(whatsappUrl);
         }
 
@@ -938,7 +910,19 @@ export default function App() {
   |--------------------------------------------------------------------------
   */
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('LOGOUT ERROR:', error);
+      alert('Unable to log out. Please try again.');
+      return;
+    }
+
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+    setIsSubAdmin(false);
+    setUserFirstName('');
     setActiveTab('home');
     goToTop();
   };
@@ -1098,19 +1082,20 @@ export default function App() {
       "
     >
 
-      {/* NAVBAR */}
-
-      <Navbar
-        activeTab={activeTab as any}
-        setActiveTab={handleNavbarTab as any}
-        cart={cart}
-        setIsCartOpen={setIsCartOpen}
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        activeOrder={!!activeOrder}
-        isLoggedIn={isLoggedIn}
-        userFirstName={userFirstName}
-      />
+      {/* HIDE THE GLOBAL NAVBAR ONLY ON THE ADMIN DASHBOARD */}
+      {!(activeTab === 'profile' && isStaff) && (
+        <Navbar
+          activeTab={activeTab as any}
+          setActiveTab={handleNavbarTab as any}
+          cart={cart}
+          setIsCartOpen={setIsCartOpen}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          activeOrder={!!activeOrder}
+          isLoggedIn={isLoggedIn}
+          userFirstName={userFirstName}
+        />
+      )}
 
       {/* PRODUCT OPTIONS MODAL */}
 
@@ -1232,26 +1217,40 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* PROFILE */}
+          {/* PROFILE — ADMIN OR CUSTOMER */}
 
-          {activeTab === 'profile' && (
-            <motion.div
-              key="tab-profile"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25 }}
-            >
-              <CustomerDashboard
-                onMyOrders={handleMyOrders}
-                onCustomerOrders={handleCustomerOrders}
-                onCustomerManagement={handleCustomerManagement}
-                onProductManagement={handleProductManagement}
-                onLogout={handleLogout}
-              />
-            </motion.div>
-          )}
-
+         
+{activeTab === 'profile' && (
+  <motion.div
+    key={
+      isStaff
+        ? 'tab-admin-profile'
+        : 'tab-customer-profile'
+    }
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    transition={{ duration: 0.25 }}
+  >
+    {isRoleLoading && isLoggedIn ? (
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <p className="text-sm text-stone-500">
+          Loading your dashboard...
+        </p>
+      </div>
+    ) : isStaff ? (
+      <AdminDashboard onLogout={handleLogout} />
+    ) : (
+      <CustomerDashboard
+        onMyOrders={handleMyOrders}
+        onCustomerOrders={handleCustomerOrders}
+        onCustomerManagement={handleCustomerManagement}
+        onProductManagement={handleProductManagement}
+        onLogout={handleLogout}
+      />
+    )}
+  </motion.div>
+)}
           {/* MY ORDERS */}
 
           {activeTab === 'my-orders' && (
@@ -1262,7 +1261,7 @@ export default function App() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
             >
-              <MyOrders />
+            
             </motion.div>
           )}
 
@@ -1328,7 +1327,7 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      {/* FLOATING WHATSAPP */}
+      {/* FLOATING WHATSAPP — REMAINS VISIBLE */}
 
       <div
         className="
@@ -1465,7 +1464,7 @@ export default function App() {
                     font-sans
                   "
                 >
-                  "Hey there welcome to yelobistro Whatsapp platform chat with victoria to place your order or make enquires"
+                  "Hey there welcome to yelobistro Whatsapp platform chat with us to place your order or make enquires"
                 </p>
 
                 <button
@@ -1531,7 +1530,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* FOOTER */}
+      {/* FOOTER — REMAINS VISIBLE */}
 
       <Footer
         setActiveTab={(tab: OldNavigationTab) => {
